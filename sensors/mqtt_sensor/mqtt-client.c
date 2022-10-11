@@ -58,7 +58,7 @@ AUTOSTART_PROCESSES(&mqtt_client_process);
 #define MAX_TCP_SEGMENT_SIZE    32
 #define CONFIG_IP_ADDR_STR_LEN   64
 
-static int value = 0;
+static int temperature = 0;
 static int humidity = 0;
 static int sun_light = 0;
 static int pressure = 0;
@@ -222,13 +222,13 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
         // Publish something , specify tag of topic
         sprintf(pub_topic, "%s", "info");
 
-        value = rand() % 48;
+        temperature = rand() % 48;
         humidity = rand() % 120;
         sun_light = rand() % 120;
         pressure = rand() % 100;
         mm_water = rand() % 50;
 
-        sprintf(app_buffer, "{\"temp\":%d,\"humidity\":%d,\"sun_light\":%d,\"press\":%d,\"mm\":%d}", value, humidity, sun_light, pressure , mm_water);
+        sprintf(app_buffer, "{\"temperature\":%d,\"humidity\":%d,\"sun_light\":%d,\"pressure\":%d,\"mm_water\":%d}", temperature, humidity, sun_light, pressure , mm_water);
 
         printf("Message: %s\n",app_buffer);
         //code to publish the message
