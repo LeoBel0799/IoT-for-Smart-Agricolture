@@ -7,11 +7,11 @@
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "motion sensor"
+#define LOG_MODULE "mechanical cover"
 #define LOG_LEVEL LOG_LEVEL_DBG
 
-static bool isActive = false;
-static int intensity = 10;
+static bool sysActive = false;
+static int openingDegree = 90;
 
 static void get_intensity_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void post_switch_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
@@ -20,13 +20,14 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
 //qui costruisco la response che devo dare al client
 
 RESOURCE(alert_actuator, //--> name
-"title=\"alarm actuator: ?POST\";obs;rt=\"alarm\"",
+"title=\"Actuator: ?POST\";obs;rt=\"alarm\"",
 get_intensity_handler,
 post_switch_handler,
 NULL,
 NULL); //--> handler invoke auto  every time the state of resource change
 
 //get per sapere lo stato
+// Modificare da 37 a 51
 static void get_intensity_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
     // Create a JSON message with the detected presence value and led value
@@ -36,17 +37,17 @@ static void get_intensity_handler(coap_message_t *request, coap_message_t *respo
     char msg[300];
     // T = true
     // N = negative
-    char val2 = isActive == true ? 'T': 'N';
-    strcpy(msg,"{\"info\":\"");
-    strncat(msg,&val2,1);
+    char active = sysActive == true ? 'T': 'N';
+    strcpy(msg,"{\"Active\":\"");
+    strncat(msg,&active,1);
     //strcat(msg,"\" \"");
-    strcat(msg,"\", \"intensity\":\"");
-    char intensity_str[400];
-    sprintf(intensity_str, "%d", intensity);
+    strcat(msg,"\", \"Opening Degree\":\"");
+    char degree[400];
+    sprintf(degree, "%d°", openingDegree);
     //printf("intensity: %s\n", intensity_str);
-    strcat(msg,intensity_str);
+    strcat(msg,degree);
     strcat(msg,"\"}");
-    printf("MSG alert: %s\n",msg);
+    printf("Message: %s\n",msg);
     length = strlen(msg);
     memcpy(buffer, (uint8_t *)msg, length);
 
@@ -59,32 +60,28 @@ static void get_intensity_handler(coap_message_t *request, coap_message_t *respo
 
 static void post_switch_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-    printf("entered in POST function!\n");
+    printf("POST function now!\n");
     if(request != NULL) {
         LOG_DBG("POST/PUT Request Sent\n");
     }
 
     printf("Post handler called\n");
-    size_t len = 0;
     const char *state = NULL;
-    int check = 1;
-    if((len = coap_get_post_variable(request, "state", &state))) {
-        if (atoi(state) == 1){
-            if(isActive==true && intensity<100){
-                intensity=intensity+10;
-            }
-            leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+
+    if (atoi(state) == 1){
+        if(sysActive==true && openingDegree<80){
+            openingDegree=openingDegree+10;
+        }
+            leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
             isActive = true;
         }
         else if(atoi(state) == 0){
-            leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
-            isActive = false;
-            intensity=10;
-        }
-        else{
+            leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+            sysActive = false;
+            intensity=0;
+        }else{
             check = 0;
         }
-    }
     else{
         check = 0;
     }

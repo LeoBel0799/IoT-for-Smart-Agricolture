@@ -7,20 +7,21 @@
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "motion sensor"
+#define LOG_MODULE "mechanical cover"
 #define LOG_LEVEL LOG_LEVEL_DBG
 #define EVENT_INTERVAL 30
 
-static bool isDetected = false;
-static bool isActive = false;
-static int intensity = 10;
+// Modifica da 41 a 62
+static bool closed = false;
+static bool sysActive = false;
+static int openingDegree = 90;
 
 static void res_get_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_event_handler(void);
 
 
-EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+EVENT_RESOURCE(cover_sensor, //--> name
+"title=\"Mechanical Grape Cover status: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
 NULL,
@@ -37,31 +38,31 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     // T = true
     // N = negative
 
-    if(isActive==true && intensity<100){
-        intensity=intensity+10;
+    if(sysActive==true && openingDegree<80){
+        openingDegree=openingDegree+10;
     }else if(isActive==false){
         intensity=10;
     }
-    if(isDetected==1){
-        isActive=true;
-    }else if (isDetected==0){
-        isActive=false;
+    if(closed==1){
+        sysActive=true;
+    }else if (closed==0){
+        sysActive=false;
     }
-    char val1 = isActive == 1 ? 'T': 'N';
-    char val2 = isDetected == 1 ? 'T': 'N';
-    strcpy(msg,"{\"isDetected\":\"");
-    strncat(msg,&val2,1);
-    strcat(msg,"\", \"info\":\"");
-    strncat(msg,&val1,1);
-    strcat(msg,"\", \"intensity\":\"");
-    char intensity_str[400];
-    sprintf(intensity_str, "%d", intensity);
-    strcat(msg,intensity_str);
+    char active = sysActive == 1 ? 'T': 'N';
+    char closed = closed == 1 ? 'T': 'N';
+    strcpy(msg,"{\"Closed\":\"");
+    strncat(msg,&closed,1);
+    strcat(msg,"\", \"Active\":\"");
+    strncat(msg,&active,1);
+    strcat(msg,"\", \"Opening Degree\":\"");
+    char degree[400];
+    sprintf(degree, "%d°", openingDegree);
+    strcat(msg,degree);
     strcat(msg,"\"}");
     length = strlen(msg);
     memcpy(buffer, (uint8_t *)msg, length);
 
-    printf("MSG res_motion send : %s\n", msg);
+    printf("MSG detection send : %s\n", msg);
     coap_set_header_content_format(response, TEXT_PLAIN);
     coap_set_header_etag(response, (uint8_t *)&length, 1);
     coap_set_payload(response, (uint8_t *)buffer, length);
@@ -71,17 +72,17 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
 static void res_event_handler(void)
 {
     srand(time(NULL));
-    int random = rand() % 2;
+    int random_v = rand() % 2;
 
-    bool new_isDetected = isDetected;
-    if(random == 0){
-        new_isDetected=!isDetected;
+    bool newClosed = closed;
+    if(random_v == 0){
+        newClosed=!closed;
     }
 
-    if(new_isDetected != isDetected){
-        isDetected = new_isDetected;
+    if(newClosed != closed){
+        closed = newClosed;
         // Notify all the observers
-        coap_notify_observers(&motion_sensor);
+        coap_notify_observers(&cover_sensor);
     }
 
 }

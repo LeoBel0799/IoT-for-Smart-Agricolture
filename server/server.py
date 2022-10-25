@@ -14,9 +14,9 @@ import logging
 # Define Variables
 MQTT_HOST = "localhost"
 MQTT_PORT = 1883
-MQTT_KEEPALIVE_INTERVAL = 45
-MQTT_TOPIC = "info"
-MQTT_MSG = "hello MQTT"
+MQTT_KEEPALIVE_INTERVAL = 60
+MQTT_TOPIC = "Infos"
+MQTT_MSG = "I'm here MQTT"
 
 ip = "::"
 port = 5683
@@ -38,20 +38,27 @@ class MqttClient():
         print ("QoS: " + str(msg.qos))
         print ("Payload: " + str(msg.payload))
         receivedData = json.loads(msg.payload)
-        temp = receivedData["temp"]
+        temp = receivedData["temperature"]
         humidity = receivedData["humidity"]
         sun_light = receivedData["sun_light"]
-        press = receivedData["press"]
-        water = receivedData["mm"]
+        press = receivedData["pressure"]
+        water = receivedData["mm_water"]
         ts = time.time()
         with self.connection.cursor() as cursor:
             # Create a new record
             sql = "INSERT INTO `mqttsensors` (`temperature`, `humidity`,`sun light` ,`pressure`, `water`) VALUES (%s, %s, %s , %s, %s)"
             cursor.execute(sql, (temp, humidity, sun_light, press, water))
-            print("temp : ")
+            print("Temperature : ")
             print(temp)
-            print("humidity : ")
+            print("Humidity : ")
             print(humidity)
+            print("Sun_Light : ")
+            print(sun_light)
+            print("Pressure : ")
+            print(press)
+            print("Water on ground : ")
+            print(water)
+
 
 
         # Commit changes
@@ -86,7 +93,7 @@ mqtt_thread = threading.Thread(target=mqttc.mqtt_client,args=(),kwargs={})
 mqtt_thread.start()
 # server = CoAPServer(ip, port)
 try:
-    print("Listening to server")
+    print("Listening server....")
     # server.listen(100)
 except KeyboardInterrupt:
     print("Server Shutdown")
