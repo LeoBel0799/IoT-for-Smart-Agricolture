@@ -60,17 +60,16 @@ AUTOSTART_PROCESSES(&mqtt_client_process);
 
 static int temperature = 0;
 static int humidity = 0;
-static int sun_light = 0;
+static char forecast[4][150] = {"Sunny","Cloudly","Heavy rain", "Ice"};
 static int pressure = 0;
 static int mm_water = 0;
-
 
 
 // Periodic timer to check the state of the MQTT client
 #define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 30
 static struct etimer periodic_timer;
 
-#define PERIODIC_TIMER 30
+#define PERIODIC_TIMER 60
 /*---------------------------------------------------------------------------*/
 /*
  * The main MQTT buffers.
@@ -222,14 +221,29 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
         // Publish something , specify tag of topic
         sprintf(pub_topic, "%s", "info");
 
-        temperature = rand() % 48;
-        humidity = rand() % 120;
-        sun_light = rand() % 120;
-        pressure = rand() % 100;
-        mm_water = rand() % 50;
-
-        sprintf(app_buffer, "{\"temperature\":%d,\"humidity\":%d,\"sun_light\":%d,\"pressure\":%d,\"mm_water\":%d}", temperature, humidity, sun_light, pressure , mm_water);
-
+        forecast = forecast[rand()%4];
+        if (forecast == "Sunny"){
+            temperature = (rand()%(32+1-25)+25);
+            humidity = (rand()%(25+1-17)+17);
+            pressure = (rand()%(1040+1-1015)+1015);
+            mm_water = 0;
+        }else if (forecast == "Cloudly"){
+            temperature = (rand()%(25+1-18)+18);
+            humidity = (rand()%(50+1-25)+25);
+            mm_water = (rand() % (1.50+1-0.01)+0.01);
+            pressure = (rand()%(1015+1-998)+998);
+        }else if (forecast == "Heavy Rain"){
+            temperature = (rand()%(18+1-12)+12);
+            humidity = (rand()%(90+1-50)+50);
+            mm_water = (rand() % (4.50+1-1.50)+1.50);
+            pressure = (rand()%(998+1-990)+990);
+        }else if (forecast == "Icy"){
+            temperature = (rand()%(5+1-(-3))+(-3));
+            humidity = (rand()%(17+1-5)+5);
+            mm_water = 0;
+            pressure = (rand()%(990+1-882)+882);
+        }
+        sprintf(app_buffer, "{\"Temperature\":%d °C,\"Humidity\":%d %,\"Forecast\":%s,\"Pressure\":%d hPa,\"Rain qty\":%d mm}", temperature, humidity, forecast, pressure , mm_water);
         printf("Message: %s\n",app_buffer);
         //code to publish the message
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,
