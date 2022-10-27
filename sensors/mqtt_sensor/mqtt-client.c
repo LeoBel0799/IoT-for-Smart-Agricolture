@@ -1,5 +1,4 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
+
 /*---------------------------------------------------------------------------*/
 #include "contiki.h"
 #include "net/routing/routing.h"
@@ -33,7 +32,7 @@
 
 static char *broker_ip = MQTT_CLIENT_BROKER_IP_ADDR;
 
-// Defaukt config values
+// Default config values
 #define DEFAULT_BROKER_PORT         1883
 #define DEFAULT_PUBLISH_INTERVAL    (30 * CLOCK_SECOND)
 
@@ -221,29 +220,29 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
         // Publish something , specify tag of topic
         sprintf(pub_topic, "%s", "info");
 
-        forecast = forecast[rand()%4];
-        if (forecast == "Sunny"){
+        currentforecast = forecast[rand()%4];
+        if (currentforecast == "Sunny"){
             temperature = (rand()%(32+1-25)+25);
             humidity = (rand()%(25+1-17)+17);
             pressure = (rand()%(1040+1-1015)+1015);
             mm_water = 0;
-        }else if (forecast == "Cloudly"){
+        }else if (currentforecast == "Cloudly"){
             temperature = (rand()%(25+1-18)+18);
             humidity = (rand()%(50+1-25)+25);
             mm_water = (rand() % (1.50+1-0.01)+0.01);
             pressure = (rand()%(1015+1-998)+998);
-        }else if (forecast == "Heavy Rain"){
+        }else if (currentforecast == "Heavy Rain"){
             temperature = (rand()%(18+1-12)+12);
             humidity = (rand()%(90+1-50)+50);
             mm_water = (rand() % (4.50+1-1.50)+1.50);
             pressure = (rand()%(998+1-990)+990);
-        }else if (forecast == "Icy"){
+        }else if (currentforecast == "Icy"){
             temperature = (rand()%(5+1-(-3))+(-3));
             humidity = (rand()%(17+1-5)+5);
             mm_water = 0;
             pressure = (rand()%(990+1-882)+882);
         }
-        sprintf(app_buffer, "{\"Temperature\":%d °C,\"Humidity\":%d %,\"Forecast\":%s,\"Pressure\":%d hPa,\"Rain qty\":%d mm}", temperature, humidity, forecast, pressure , mm_water);
+        sprintf(app_buffer, "{\"Temperature\":%d °C,\"Humidity\":%d %,\"Forecast\":%s,\"Pressure\":%d hPa,\"Rain qty\":%d mm}", temperature, humidity, currentforecast, pressure , mm_water);
         printf("Message: %s\n",app_buffer);
         //code to publish the message
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,
@@ -258,8 +257,8 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
     }
 
   }
+    PROCESS_END();
 }
 
 
 
-#pragma clang diagnostic pop
