@@ -59,7 +59,7 @@ AUTOSTART_PROCESSES(&mqtt_client_process);
 
 static int temperature = 0;
 static int humidity = 0;
-static char forecast[4][150] = {"Sunny","Cloudly","Heavy rain", "Ice"};
+static char forecast[4][150] = {"Sunny","Cloudly","Heavy rain", "Icy"};
 static int pressure = 0;
 static int mm_water = 0;
 static char currentforecast[150] = {""};
@@ -239,10 +239,10 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
         }else if (strcmp(currentforecast,"Icy")){
             temperature = (rand()%(5+1-(-3))+(-3));
             humidity = (rand()%(17+1-5)+5);
-            mm_water = 0.0;
+            mm_water = 0;
             pressure = (rand()%(990+1-882)+882);
         }
-        sprintf(app_buffer, "{\"Temperature (Celsius)\":%d ,\"Humidity (Percentage)\":%d  ,\"Forecast\": %s,\"Pressure (hPa)\":%d ,\"Rain qty (mm)\":%d}", temperature, humidity, currentforecast, pressure , mm_water);
+        sprintf(app_buffer, "{\"Temperature\":%d ,\"Humidity\":%d  ,\" Forecast\": %s,\" Pressure (hPa)\":%d ,\"Rain qty (mm)\":%d}", temperature, humidity, currentforecast, pressure , mm_water);
         printf("Message: %s\n",app_buffer);
         //code to publish the message
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,
@@ -256,9 +256,10 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
 	  etimer_set(&periodic_timer, STATE_MACHINE_PERIODIC);
     }
 
-  }
+   }
     PROCESS_END();
 }
+
 
 
 

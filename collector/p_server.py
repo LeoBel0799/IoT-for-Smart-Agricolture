@@ -1,15 +1,15 @@
 # Import package
 import paho.mqtt.client as mqtt
-from coapthon.server.coap import CoAP
-from server import *
-import argparse
+# from coapthon.server.coap import CoAP
+# from server import *
+# import argparse
 import threading
 import json
-from database import Database
+from databases import Database
 import tabulate
 import time
 import datetime
-import logging
+# import logging
 
 
 # Define Variables
@@ -26,12 +26,12 @@ port = 5683
     Class CoAPServer. Simply instantiate a CoAPServer (extends base class CoAP) and add a resource 
     AdvancedResource, to manage registrations
 '''
-class CoAPServer(CoAP):
-    def __init__(self, host, port):
-        CoAP.__init__(self, (host, port), False)
+#class CoAPServer(CoAP):
+    #def __init__(self, host, port):
+        # CoAP.__init__(self, (host, port), False)
         # Register resource: server behave as client in order to get the registration
-        print("adding resource");
-        self.add_resource("registration", AdvancedResource())
+        # print("adding resource");
+        # self.add_resource("registration", AdvancedResource())
 
 
 class MqttClient():
@@ -103,23 +103,23 @@ class MqttClient():
         self.client.loop_forever()
 
 
-logging.getLogger("coapthon.server.coap").setLevel(logging.WARNING)
-logging.getLogger("coapthon.layers.messagelayer").setLevel(logging.WARNING)
-logging.getLogger("coapthon.client.coap").setLevel(logging.WARNING)
+# logging.getLogger("coapthon.server.coap").setLevel(logging.WARNING)
+# logging.getLogger("coapthon.layers.messagelayer").setLevel(logging.WARNING)
+# logging.getLogger("coapthon.client.coap").setLevel(logging.WARNING)
 
 
 # Initiate MQTT Client
 mqttc = MqttClient();
 mqtt_thread = threading.Thread(target=mqttc.mqtt_client,args=(),kwargs={})
 mqtt_thread.start()
-server = CoAPServer(ip, port)
+# server = CoAPServer(ip, port)
 try:
     print("Listening server")
-    server.listen(100)
+    # server.listen(100)
 except KeyboardInterrupt:
     print("Server Shutdown")
     mqttc.kill()
     mqttc.join()
-    server.close()
+    # server.close()
     print("Exiting...")
 mqttc.loop_forever()
