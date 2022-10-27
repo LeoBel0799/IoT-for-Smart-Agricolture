@@ -49,14 +49,14 @@ class MqttClient():
         print ("QoS: " + str(msg.qos))
         print ("Payload: " + str(msg.payload))
         receivedData = json.loads(msg.payload)
-        temperature = receivedData["temperature"]
-        humidity = receivedData["humidity"]
-        pressure = receivedData["pressure"]
-        forecast = receivedData["forecast"]
-        water = receivedData["water"]
-        if receivedData["forecast"] == "Sunny":
+        temperature = receivedData["Temperature"]
+        humidity = receivedData["Humidity"]
+        pressure = receivedData["Pressure"]
+        forecast = receivedData["Forecast"]
+        water = receivedData["Water"]
+        if receivedData["Forecast"] == "Sunny":
             forecast = "LOUMINOUS"
-        elif receivedData["forecast"] == "Cloudly" or receivedData["forecast"] == "Heavy Rain" or receivedData["forecast"] == "Icy":
+        elif receivedData["Forecast"] == "Cloudly" or receivedData["Forecast"] == "Heavy Rain" or receivedData["Forecast"] == "Icy":
             forecast = "DARK"
 
         ts = time.time()
