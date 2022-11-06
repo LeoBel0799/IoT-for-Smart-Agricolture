@@ -5,10 +5,14 @@ import paho.mqtt.client as mqtt
 # import argparse
 import threading
 import json
-from databases import Database
+#from databases import Database
+import database
 import tabulate
 import time
 import datetime
+
+from collector import server
+
 # import logging
 
 
@@ -51,9 +55,9 @@ class MqttClient():
         receivedData = json.loads(msg.payload)
         temperature = receivedData["Temperature"]
         humidity = receivedData["Humidity"]
-        pressure = receivedData["Pressure"]
+        pressure = receivedData["Pressure (hPa)"]
         forecast = receivedData["Forecast"]
-        water = receivedData["Water"]
+        water = receivedData["Rain qty (mm)"]
         if receivedData["Forecast"] == "Sunny":
             forecast = "LOUMINOUS"
         elif receivedData["Forecast"] == "Cloudly" or receivedData["Forecast"] == "Heavy Rain" or receivedData["Forecast"] == "Icy":
@@ -63,7 +67,7 @@ class MqttClient():
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         with self.connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO `mqttsensors` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`, `timestamp`) VALUES (%s, %s, %s , %s, %s)"
+            sql = "INSERT INTO `mqttsensors` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`, `timestamp`) VALUES (%d, %d, %s , %d, %d)"
             cursor.execute(sql, (temperature, humidity, forecast, pressure, water, timestamp))
             print("Temperature : ")
             print(temperature)
@@ -81,7 +85,7 @@ class MqttClient():
         self.connection.commit()
 
         with self.connection.cursor() as cursor2:
-            sql = "SELECT * FROM `mqttsensors`"
+            sql = "SELECT * FROM `mqttcollector`"
             cursor2.execute(sql)
             results = cursor2.fetchall()
             header = results[0].keys()
@@ -89,7 +93,7 @@ class MqttClient():
             print(tabulate.tabulate(rows,header,tablefmt='grid'))
 
     def mqtt_client(self):
-        self.db = Database()
+        self.db = database.Database()
         self.connection = self.db.connect_dbs()
         print("Mqtt client starting")
         self.client = mqtt.Client()
@@ -115,7 +119,7 @@ mqtt_thread.start()
 # server = CoAPServer(ip, port)
 try:
     print("Listening server")
-    # server.listen(100)
+    server.listen(100)
 except KeyboardInterrupt:
     print("Server Shutdown")
     mqttc.kill()
