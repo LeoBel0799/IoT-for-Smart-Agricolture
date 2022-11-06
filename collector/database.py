@@ -11,7 +11,7 @@ import pymysql.cursors
 class Database:
     connection = None
 
-    def __init__(self, url):
+    def __init__(self):
         print("Instantiating!")
 
     def connect_dbs(self):

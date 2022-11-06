@@ -5,8 +5,7 @@ import paho.mqtt.client as mqtt
 # import argparse
 import threading
 import json
-#from databases import Database
-import database
+from database import Database
 import tabulate
 import time
 import datetime
@@ -93,7 +92,7 @@ class MqttClient():
             print(tabulate.tabulate(rows,header,tablefmt='grid'))
 
     def mqtt_client(self):
-        self.db = database.Database()
+        self.db = Database()
         self.connection = self.db.connect_dbs()
         print("Mqtt client starting")
         self.client = mqtt.Client()
