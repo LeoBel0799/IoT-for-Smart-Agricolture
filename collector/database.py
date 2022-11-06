@@ -6,10 +6,12 @@ import pymysql.cursors
     Class Database: open a connection through mysql database, to database datacollector containing the coapsensors 
     table (with information about access and logout  , and log of intrution detection) and the mqttsensors (with information about room)
 '''
+
+
 class Database:
     connection = None
 
-    def __init__(self,url):
+    def __init__(self, url):
         print("Instantiating!")
 
     def connect_dbs(self):

@@ -5,10 +5,11 @@ import paho.mqtt.client as mqtt
 # import argparse
 import threading
 import json
-from databases import Database
+#from databases import Database
 import tabulate
 import time
 import datetime
+import database
 # import logging
 
 
@@ -34,7 +35,7 @@ port = 5683
         # self.add_resource("registration", AdvancedResource())
 
 
-class MqttClient():
+class MqttClient:
     # Define on connect event function
     # We shall subscribe to our Topic in this function
     def on_connect(self, client, mosq, obj, rc):
@@ -63,7 +64,7 @@ class MqttClient():
        # timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         with self.connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO `mqttcollector` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`) VALUES (%s, %s, %s , %s)"
+            sql = "INSERT INTO `mqttcollector` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`) VALUES (%d, %d, %s , %d,%d)"
             cursor.execute(sql, (temperature, humidity, forecast, pressure, water))
             print("Temperature : ")
             print(temperature)
@@ -89,7 +90,7 @@ class MqttClient():
             print(tabulate.tabulate(rows,header,tablefmt='grid'))
 
     def mqtt_client(self):
-        self.db = Database()
+        self.db = database.Database()
         self.connection = self.db.connect_dbs()
         print("Mqtt client starting")
         self.client = mqtt.Client()
@@ -122,4 +123,4 @@ except KeyboardInterrupt:
     mqttc.join()
     # server.close()
     print("Exiting...")
-mqttc.loop_forever()
+# mqttc.loop_forever()
