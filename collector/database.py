@@ -9,7 +9,7 @@ import pymysql.cursors
 class Database:
     connection = None
 
-    def __init__(self):
+    def __init__(self,url):
         print("Instantiating!")
 
     def connect_dbs(self):
