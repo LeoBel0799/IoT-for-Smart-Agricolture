@@ -59,10 +59,11 @@ AUTOSTART_PROCESSES(&mqtt_client_process);
 
 static int temperature = 0;
 static int humidity = 0;
-static char forecast[4][150] = {"Sunny\0","Cloudly\0","Heavy rain\0", "Icy\0"};
+static char forecast[4][150] = {"Sunny","Cloudly","Heavy rain", "Icy"};
 static int pressure = 0;
 static int mm_water = 0;
-static char currentforecast[150] = {""};
+static char currentforecast[150];
+static char whether[150];
 
 
 // Periodic timer to check the state of the MQTT client
@@ -225,24 +226,28 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
             temperature = (rand()%(32+1-25)+25);
             humidity = (rand()%(25+1-17)+17);
             pressure = (rand()%(1040+1-1015)+1015);
+            strcpy(whether,"Sunny");
             mm_water = 0;
         }else if (strcmp(currentforecast,"Cloudly")){
             temperature = (rand()%(25+1-18)+18);
             humidity = (rand()%(50+1-25)+25);
             mm_water =  (rand() % (2+1-1)+1);
             pressure = (rand()%(1015+1-998)+998);
+            strcpy(whether,"Cloudly");
         }else if (strcmp(currentforecast,"Heavy Rain")){
             temperature = (rand()%(18+1-12)+12);
             humidity = (rand()%(90+1-50)+50);
             mm_water = (rand() % (5+1-2)+2);
             pressure = (rand()%(998+1-990)+990);
+            strcpy(whether,"Heavy Rain");
         }else if (strcmp(currentforecast,"Icy")){
             temperature = (rand()%(5+1-(-3))+(-3));
             humidity = (rand()%(17+1-5)+5);
             mm_water = 0;
+            strcpy(whether,"Icy");
             pressure = (rand()%(990+1-882)+882);
         }
-        sprintf(app_buffer, "{\"Temperature\":%d ,\"Humidity\":%d  ,\"Forecast\": %s,\"Pressure (hPa)\":%d ,\"Rain qty (mm)\":%d}", temperature, humidity, currentforecast, pressure , mm_water);
+        sprintf(app_buffer, "{\"tmperature\":%d ,\"humidity\":%d  ,\"forecast\": %s,\"pressure\":%d ,\"rain\":%d}", temperature, humidity, whether, pressure , mm_water);
         printf("Message: %s\n",app_buffer);
         //code to publish the message
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,

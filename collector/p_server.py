@@ -52,22 +52,22 @@ class MqttClient():
         print ("QoS: " + str(msg.qos))
         print ("Payload: " + str(msg.payload))
         receivedData = json.loads(msg.payload)
-        temperature = receivedData["Temperature"]
-        humidity = receivedData["Humidity"]
-        pressure = receivedData["Pressure (hPa)"]
-        forecast = receivedData["Forecast"]
-        water = receivedData["Rain qty (mm)"]
-        if receivedData["Forecast"] == "Sunny":
+        temperature = receivedData["temperature"]
+        humidity = receivedData["humidity"]
+        pressure = receivedData["pressure"]
+        forecast = receivedData["forecast"]
+        water = receivedData["rain"]
+        if receivedData["forecast"] == "Sunny":
             forecast = "LOUMINOUS"
-        elif receivedData["Forecast"] == "Cloudly" or receivedData["Forecast"] == "Heavy Rain" or receivedData["Forecast"] == "Icy":
+        elif receivedData["forecast"] == "forecast" or receivedData["forecast"] == "Heavy Rain" or receivedData["forecast"] == "Icy":
             forecast = "DARK"
 
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         with self.connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO `mqttsensors` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`, `timestamp`) VALUES (%d, %d, %s , %d, %d)"
-            cursor.execute(sql, (temperature, humidity, forecast, pressure, water, timestamp))
+            sql = "INSERT INTO `mqttsensors` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`) VALUES (%d, %d, %s,%d,%d)"
+            cursor.execute(sql, (temperature, humidity, forecast, pressure, water))
             print("Temperature : ")
             print(temperature)
             print("Humidity :")
