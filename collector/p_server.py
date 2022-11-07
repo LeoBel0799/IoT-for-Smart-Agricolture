@@ -10,7 +10,7 @@ import tabulate
 import time
 import datetime
 
-from collector import server
+#from collector import server
 
 # import logging
 
@@ -30,11 +30,11 @@ port = 5683
     AdvancedResource, to manage registrations
 '''
 #class CoAPServer(CoAP):
-    #def __init__(self, host, port):
-        # CoAP.__init__(self, (host, port), False)
-        # Register resource: server behave as client in order to get the registration
-        # print("adding resource");
-        # self.add_resource("registration", AdvancedResource())
+#def __init__(self, host, port):
+# CoAP.__init__(self, (host, port), False)
+# Register resource: server behave as client in order to get the registration
+# print("adding resource");
+# self.add_resource("registration", AdvancedResource())
 
 
 class MqttClient():
@@ -57,16 +57,16 @@ class MqttClient():
         pressure = receivedData["pressure"]
         forecast = receivedData["forecast"]
         water = receivedData["rain"]
-        if receivedData["forecast"] == "Sunny":
+        if receivedData["forecast"] == 1:
             forecast = "LOUMINOUS"
-        elif receivedData["forecast"] == "forecast" or receivedData["forecast"] == "Heavy Rain" or receivedData["forecast"] == "Icy":
+        elif receivedData["forecast"] == 2 or receivedData["forecast"] == 3 or receivedData["forecast"] == 4:
             forecast = "DARK"
 
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         with self.connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO `mqttsensors` (`temperature`, `humidity`,`forecast` ,`pressure`, `water`) VALUES (%d, %d, %s,%d,%d)"
+            sql = "INSERT INTO `mqttsensors` (`temperature`,`humidity`,`forecast`,`pressure`,`water`) VALUES (%d,%d,%d,%d.%d)"
             cursor.execute(sql, (temperature, humidity, forecast, pressure, water))
             print("Temperature : ")
             print(temperature)
@@ -84,7 +84,7 @@ class MqttClient():
         self.connection.commit()
 
         with self.connection.cursor() as cursor2:
-            sql = "SELECT * FROM `mqttcollector`"
+            sql = "SELECT * FROM `mqttsensors`"
             cursor2.execute(sql)
             results = cursor2.fetchall()
             header = results[0].keys()
@@ -118,11 +118,11 @@ mqtt_thread.start()
 # server = CoAPServer(ip, port)
 try:
     print("Listening server")
-    server.listen(100)
+    #server.listen(100)
 except KeyboardInterrupt:
     print("Server Shutdown")
     mqttc.kill()
     mqttc.join()
     # server.close()
     print("Exiting...")
-mqttc.loop_forever()
+#mqttc.loop_forever()
