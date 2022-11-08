@@ -70,7 +70,7 @@ static int whether = 0;
 #define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 30
 static struct etimer periodic_timer;
 
-#define PERIODIC_TIMER 60
+#define PERIODIC_TIMER 30
 /*---------------------------------------------------------------------------*/
 /*
  * The main MQTT buffers.
