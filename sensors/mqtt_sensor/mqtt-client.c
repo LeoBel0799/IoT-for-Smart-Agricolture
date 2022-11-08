@@ -247,7 +247,7 @@ PROCESS_THREAD(mqtt_client_process, ev, data)
             whether = 4;
             pressure = (rand()%(990+1-882)+882);
         }
-        sprintf(app_buffer, "{\"temperature\":%d,\"humidity\":%d,\"forecast\":%d,\"pressure\":%d,\"rain\":%d}", temperature, humidity, whether, pressure , mm_water);
+        sprintf(app_buffer, "{\"temperature\":%d,\"humidity\":%d,\"forecast\":%d,\"pressure\":%d,\"rain\":%d}",temperature,humidity,whether,pressure,mm_water);
         printf("Message: %s\n",app_buffer);
         //code to publish the message
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,
