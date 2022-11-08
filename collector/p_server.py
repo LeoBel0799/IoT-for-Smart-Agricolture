@@ -55,13 +55,9 @@ class MqttClient():
         forecast = receivedData["forecast"]
         water = receivedData["rain"]
         if receivedData["forecast"] == 1:
-            forecast = "Sunny"
-        elif receivedData["forecast"] == 2:
-            forecast = "Cloudly"
-        elif receivedData["forecast"] == 3:
-            forecast = "Heavy Rain"
-        elif receivedData["forecast"] == 4:
-            forecast = "Icy"
+            forecast = "GOOD ATM CONDITIONS"
+        elif receivedData["forecast"] == 2 or receivedData["forecast"] == 3 or receivedData["forecast"] == 4:
+            forecast = "BAD ATM CONDITIONS"
 
         ts = time.time()
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
