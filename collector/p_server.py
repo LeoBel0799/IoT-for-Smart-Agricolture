@@ -66,8 +66,8 @@ class MqttClient():
         timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         with self.connection.cursor() as cursor:
             # Create a new record
-            sql = "INSERT INTO mqttsensors (temperature,humidity,forecast,pressure,water,timestamp) VALUES (%s,%s,%s,%s,%s)"
-            cursor.execute(sql, (temperature, humidity, forecast, pressure, water, timestamp))
+            sql = "INSERT INTO mqttsensors (temperature,humidity,forecast,pressure,water) VALUES (%s,%s,%s,%s)"
+            cursor.execute(sql, (temperature, humidity, forecast, pressure, water))
             print("Temperature : ")
             print(temperature)
             print("Humidity :")
