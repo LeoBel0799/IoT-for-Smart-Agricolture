@@ -13,9 +13,9 @@ class MotionResource :
         self.address = source_address
         self.resource = resource
         self.actuator_resource = "alert_actuator"
-        self.isDetected = "F";
-        self.intensity = 10;
-        self.isActive = "F";
+        self.isClosed = "F";
+        self.degreeOpening = 90;
+        self.sysActive = "F";
         # Start observing for updates
         self.start_observing()
         print("Mechanical Cover inizitialized")
@@ -27,16 +27,16 @@ class MotionResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            closed = nodeData["closed"].split(" ")
+            isClosed = nodeData["closed"].split(" ")
             active = nodeData["active"].split(" ")
-            degreeOpen = nodeData["opening degree"].split(" ")
+            degreeOpening = nodeData["opening degree"].split(" ")
             print("Detection value node :")
-            print(closed)
+            print(isClosed)
             print(active)
-            print(degreeOpen)
-            self.closed = closed[0]
-            self.active = active[0]
-            self.degreeOpening = degreeOpen[0];
+            print(degreeOpening)
+            self.closed = isClosed[0]
+            self.sysActive = active[0]
+            self.degreeOpening = degreeOpening[0];
             # when occour an intrusion a query is executed
             if self.closed == 'T':
                 response = self.client.post(self.actuator_resource,"state=1")
@@ -55,16 +55,16 @@ class MotionResource :
         print(self.connection)
         with self.connection.cursor() as cursor:
             degree = str(self.degreeOpening)
-            on = str(self.active)
-            sql = "INSERT INTO `coapsensorsmotion` (`value`,`on`,`degree`) VALUES (%s,%s,%s)"
-            cursor.execute(sql, (value,on,degree))
+            systemon = str(self.sysActive)
+            sql = "INSERT INTO coapsensorsmotion (active,systemOn,degreeOp) VALUES (%s,%s,%s)"
+            cursor.execute(sql, (value,systemon,degree))
 
         # connection is not autocommit by default. So you must commit to save
-        # your changes.
+        # your chcreatanges.
         self.connection.commit()
         # Show data log
         with self.connection.cursor() as cursor2:
-            sql = "SELECT * FROM `coapsensorsmotion`"
+            sql = "SELECT * FROM coapsensorsmotion"
             cursor2.execute(sql)
             results = cursor2.fetchall()
             header = results[0].keys()

@@ -13,7 +13,7 @@ class AlertResource :
         self.address = source_address
         self.resource = resource
         self.actuator_resource = "alert_actuator"
-        self.intensity = 90;
+        self.degreeOpening = 90;
         self.isActive = "F";
         # Start observing for updates
         self.start_observing()
@@ -31,8 +31,8 @@ class AlertResource :
             print("Detection mechanical cover degree status :")
             print(active)
             print(degreeOp)
-            self.closed = active[0]
-            self.degree = degreeOp[0];
+            self.active = active[0]
+            self.degreeOpening = degreeOp[0];
             # when an intrusion occurs a query is executed
             if self.closed == 'T':
                 #response = self.client.post(self.actuator_resource,"state=1")
@@ -44,15 +44,15 @@ class AlertResource :
     def execute_query(self , value):
         print(self.connection)
         with self.connection.cursor() as cursor:
-            intensity = str(self.intensity)
-            sql = "INSERT INTO `coapsensorsalarm` (`active`, `degreeOp`) VALUES (%s, %s)"
-            cursor.execute(sql, (value, intensity))
+            degreeOpening = str(self.degreeOpening)
+            sql = "INSERT INTO coapsensorsalarm (active, degreeOp) VALUES (%s, %s)"
+            cursor.execute(sql, (value, degreeOpening))
         # connection is not autocommit by default. So you must commit to save
         # your changes.
         self.connection.commit()
         # Show data log
         with self.connection.cursor() as cursor2:
-            sql = "SELECT * FROM `coapsensorsalarm`"
+            sql = "SELECT * FROM coapsensorsalarm"
             cursor2.execute(sql)
             results = cursor2.fetchall()
             header = results[0].keys()

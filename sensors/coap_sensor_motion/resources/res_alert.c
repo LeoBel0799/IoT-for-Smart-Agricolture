@@ -7,7 +7,7 @@
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "mechanical cover"
+#define LOG_MODULE "motion sensor"
 #define LOG_LEVEL LOG_LEVEL_DBG
 
 static bool sysActive = false;
@@ -60,28 +60,32 @@ static void get_intensity_handler(coap_message_t *request, coap_message_t *respo
 
 static void post_switch_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-    printf("POST function now!\n");
+    printf("entered in POST function!\n");
     if(request != NULL) {
         LOG_DBG("POST/PUT Request Sent\n");
     }
 
     printf("Post handler called\n");
+    size_t len = 0;
     const char *state = NULL;
-
-    if (atoi(state) == 1){
-        if(sysActive==true && openingDegree<80){
-            openingDegree=openingDegree+10;
-        }
+    int check = 1;
+    if((len = coap_get_post_variable(request, "state", &state))) {
+        if (atoi(state) == 1){
+            if(sysActive == true && openingDegree < 80){
+                openingDegree = openingDegree + 10;
+            }
             leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
-            isActive = true;
+            sysActive = true;
         }
         else if(atoi(state) == 0){
             leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
             sysActive = false;
-            intensity=0;
-        }else{
+            openingDegree = 0;
+        }
+        else{
             check = 0;
         }
+    }
     else{
         check = 0;
     }
@@ -93,5 +97,6 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
         coap_set_status_code(response, BAD_REQUEST_4_00);
     }
 }
+
 
 

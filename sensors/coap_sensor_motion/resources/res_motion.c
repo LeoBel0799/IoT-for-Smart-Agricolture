@@ -7,12 +7,12 @@
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "mechanical cover"
+#define LOG_MODULE "motion sensor"
 #define LOG_LEVEL LOG_LEVEL_DBG
 #define EVENT_INTERVAL 30
 
 // Modifica da 41 a 62
-static bool closed = false;
+static bool closedgate = false;
 static bool sysActive = false;
 static int openingDegree = 90;
 
@@ -20,7 +20,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
 static void res_event_handler(void);
 
 
-EVENT_RESOURCE(cover_sensor, //--> name
+EVENT_RESOURCE(motion_sensor, //--> name
 "title=\"Mechanical Grape Cover status: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
@@ -40,16 +40,16 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
 
     if(sysActive==true && openingDegree<80){
         openingDegree=openingDegree+10;
-    }else if(isActive==false){
-        intensity=10;
+    }else if(sysActive==false){
+            openingDegree = 90;
     }
-    if(closed==1){
+    if(closedgate==1){
         sysActive=true;
-    }else if (closed==0){
+    }else if (closedgate==0){
         sysActive=false;
     }
     char active = sysActive == 1 ? 'T': 'N';
-    char closed = closed == 1 ? 'T': 'N';
+    char closed = closedgate == 1 ? 'T': 'N';
     strcpy(msg,"{\"Closed\":\"");
     strncat(msg,&closed,1);
     strcat(msg,"\", \"Active\":\"");
@@ -74,15 +74,15 @@ static void res_event_handler(void)
     srand(time(NULL));
     int random_v = rand() % 2;
 
-    bool newClosed = closed;
+    bool newClosed = closedgate;
     if(random_v == 0){
-        newClosed=!closed;
+        newClosed=!closedgate;
     }
 
-    if(newClosed != closed){
-        closed = newClosed;
+    if(newClosed != closedgate){
+        closedgate = newClosed;
         // Notify all the observers
-        coap_notify_observers(&cover_sensor);
+        coap_notify_observers(&motion_sensor);
     }
 
 }
