@@ -54,7 +54,7 @@ class MqttClient():
         pressure = receivedData["pressure"]
         forecast = receivedData["forecast"]
         water = receivedData["rain"]
-        if receivedData["forecast"] == 1:
+        if receivedData["forecast"] == 1 or (receivedData["forecast"] == 2 and receivedData["rain"] == 0):
             forecast = "GOOD ATM CONDITIONS"
         elif receivedData["forecast"] == 2 or receivedData["forecast"] == 3 or receivedData["forecast"] == 4:
             forecast = "BAD ATM CONDITIONS"
