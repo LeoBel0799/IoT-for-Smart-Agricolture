@@ -11,7 +11,7 @@
 #define LOG_LEVEL LOG_LEVEL_DBG
 
 static bool sysActive = false;
-static int openingDegree = 90;
+static int openingDegree = 180;
 
 static void get_intensity_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void post_switch_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
@@ -71,7 +71,7 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
     int check = 1;
     if((len = coap_get_post_variable(request, "state", &state))) {
         if (atoi(state) == 1){
-            if(sysActive == true && openingDegree < 80){
+            if(sysActive == true && openingDegree < 180){
                 openingDegree = openingDegree + 10;
             }
             leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));

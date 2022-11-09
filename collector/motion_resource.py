@@ -14,7 +14,7 @@ class MotionResource :
         self.resource = resource
         self.actuator_resource = "alert_actuator"
         self.isClosed = "F";
-        self.degreeOpening = 90;
+        self.degreeOpening = 180;
         self.sysActive = "F";
         # Start observing for updates
         self.start_observing()
@@ -27,9 +27,9 @@ class MotionResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            isClosed = nodeData["closed"].split(" ")
-            active = nodeData["active"].split(" ")
-            degreeOpening = nodeData["opening degree"].split(" ")
+            isClosed = nodeData["Closed"].split(" ")
+            active = nodeData["Active"].split(" ")
+            degreeOpening = nodeData["Opening Degree"].split(" ")
             print("Detection value node :")
             print(isClosed)
             print(active)

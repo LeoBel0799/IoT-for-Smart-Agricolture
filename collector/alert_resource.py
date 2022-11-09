@@ -13,7 +13,7 @@ class AlertResource :
         self.address = source_address
         self.resource = resource
         self.actuator_resource = "alert_actuator"
-        self.degreeOpening = 90;
+        self.degreeOpening = 180;
         self.isActive = "F";
         # Start observing for updates
         self.start_observing()
@@ -26,8 +26,8 @@ class AlertResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            active = nodeData["active"].split(" ")
-            degreeOp = nodeData["degreeOpening"].split(" ")
+            active = nodeData["Active"].split(" ")
+            degreeOp = nodeData["Opening Degree"].split(" ")
             print("Detection mechanical cover degree status :")
             print(active)
             print(degreeOp)
@@ -45,7 +45,7 @@ class AlertResource :
         print(self.connection)
         with self.connection.cursor() as cursor:
             degreeOpening = str(self.degreeOpening)
-            sql = "INSERT INTO coapsensorsalarm (value, degreeOp) VALUES (%s, %s)"
+            sql = "INSERT INTO coapsensorsalarm (value, degreeOpening) VALUES (%s, %s)"
             cursor.execute(sql, (value, degreeOpening))
         # connection is not autocommit by default. So you must commit to save
         # your changes.

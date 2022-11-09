@@ -14,7 +14,7 @@
 // Modifica da 41 a 62
 static bool closedgate = false;
 static bool sysActive = false;
-static int openingDegree = 90;
+static int openingDegree = 180;
 
 static void res_get_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_event_handler(void);
@@ -38,10 +38,10 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     // T = true
     // N = negative
 
-    if(sysActive==true && openingDegree<80){
+    if(sysActive==true && openingDegree<180){
         openingDegree=openingDegree+10;
     }else if(sysActive==false){
-            openingDegree = 90;
+            openingDegree = 180;
     }
     if(closedgate==1){
         sysActive=true;
