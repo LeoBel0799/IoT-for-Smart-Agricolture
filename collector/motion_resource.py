@@ -56,7 +56,7 @@ class MotionResource :
         with self.connection.cursor() as cursor:
             degree = str(self.degreeOpening)
             systemon = str(self.sysActive)
-            sql = "INSERT INTO coapsensorsmotion (value,systemon,intensity) VALUES (%s,%s,%s)"
+            sql = "INSERT INTO coapsensorsmotion (value,systemon,degree) VALUES (%s,%s,%s)"
             cursor.execute(sql, (value,systemon,degree))
 
         # connection is not autocommit by default. So you must commit to save
