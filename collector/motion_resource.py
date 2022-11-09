@@ -38,7 +38,7 @@ class MotionResource :
             self.sysActive = active[0]
             self.degreeOpening = degreeOpening[0];
             # when occour an intrusion a query is executed
-            if self.closed == 'T':
+            if self.isClosed == 'T':
                 response = self.client.post(self.actuator_resource,"state=1")
                 # query quando è aperto
                 self.execute_query_cover(1)
@@ -56,7 +56,7 @@ class MotionResource :
         with self.connection.cursor() as cursor:
             degree = str(self.degreeOpening)
             systemon = str(self.sysActive)
-            sql = "INSERT INTO coapsensorsmotion (active,systemOn,degreeOp) VALUES (%s,%s,%s)"
+            sql = "INSERT INTO coapsensorsmotion (value,systemon,intensity) VALUES (%s,%s,%s)"
             cursor.execute(sql, (value,systemon,degree))
 
         # connection is not autocommit by default. So you must commit to save
