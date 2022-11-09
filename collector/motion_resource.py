@@ -54,10 +54,11 @@ class MotionResource :
 
         print(self.connection)
         with self.connection.cursor() as cursor:
-            degree = str(self.degreeOpening)
+            degreeOpening = str(self.degreeOpening)
             systemon = str(self.sysActive)
-            sql = "INSERT INTO coapsensorsmotion (value,systemon,degree) VALUES (%s,%s,%s)"
-            cursor.execute(sql, (value,systemon,degree))
+            sql = "INSERT INTO coapsensorsmotion (value,systemon,degreeOpening) VALUES (%s,%s,%s)"
+            cursor.execute(sql, (value,systemon,degreeOpening))
+
 
         # connection is not autocommit by default. So you must commit to save
         # your chcreatanges.
