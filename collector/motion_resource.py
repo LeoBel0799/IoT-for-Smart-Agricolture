@@ -1,9 +1,19 @@
-
+from coapthon.server.coap import CoAP
+from coapthon.resources.resource import Resource
 from coapthon.client.helperclient import HelperClient
+from coapthon.messages.request import Request
+from coapthon.messages.response import Response
+from coapthon import defines
 import json
+import time
+import server
+import threading
 from database import Database
 import tabulate
 import logging
+from datetime import datetime
+from alert_resource import AlertResource
+
 
 class MotionResource :
     def __init__(self,source_address,resource):
@@ -28,14 +38,14 @@ class MotionResource :
             nodeData = json.loads(response.payload)
             # read from payload of client
             isClosed = nodeData["Closed"].split(" ")
-            active = nodeData["Active"].split(" ")
+            isActive = nodeData["Active"].split(" ")
             degreeOpening = nodeData["Opening Degree"].split(" ")
             print("Detection value node :")
             print(isClosed)
-            print(active)
+            print(isActive)
             print(degreeOpening)
             self.closed = isClosed[0]
-            self.sysActive = active[0]
+            self.sysActive = isActive[0]
             self.degreeOpening = degreeOpening[0];
             # when occour an intrusion a query is executed
             if self.isClosed == 'T':

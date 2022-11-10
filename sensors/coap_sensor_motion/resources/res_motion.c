@@ -21,7 +21,7 @@ static void res_event_handler(void);
 
 
 EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"Mechanical Grape Cover status: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
 NULL,
@@ -56,7 +56,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     strncat(msg,&active,1);
     strcat(msg,"\", \"Opening Degree\":\"");
     char degree[400];
-    sprintf(degree, "%d°", openingDegree);
+    sprintf(degree, "%d", openingDegree);
     strcat(msg,degree);
     strcat(msg,"\"}");
     length = strlen(msg);
