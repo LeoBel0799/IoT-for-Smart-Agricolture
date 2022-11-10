@@ -25,7 +25,7 @@ class MotionResource :
         self.actuator_resource = "alert_actuator"
         self.isClosed = "F";
         self.degreeOpening = 180;
-        self.sysActive = "F";
+        self.isActive = "F";
         # Start observing for updates
         self.start_observing()
         print("Mechanical Cover inizitialized")
@@ -38,14 +38,14 @@ class MotionResource :
             nodeData = json.loads(response.payload)
             # read from payload of client
             isClosed = nodeData["Closed"].split(" ")
-            isActive = nodeData["Active"].split(" ")
+            active = nodeData["Active"].split(" ")
             degreeOpening = nodeData["Opening Degree"].split(" ")
             print("Detection value node :")
             print(isClosed)
-            print(isActive)
+            print(active)
             print(degreeOpening)
-            self.closed = isClosed[0]
-            self.sysActive = isActive[0]
+            self.isClosed = isClosed[0]
+            self.isActive = active[0]
             self.degreeOpening = degreeOpening[0];
             # when occour an intrusion a query is executed
             if self.isClosed == 'T':
@@ -65,7 +65,7 @@ class MotionResource :
         print(self.connection)
         with self.connection.cursor() as cursor:
             degreeOpening = str(self.degreeOpening)
-            systemon = str(self.sysActive)
+            systemon = str(self.isActive)
             sql = "INSERT INTO coapsensorsmotion (value,systemon,degreeOpening) VALUES (%s,%s,%s)"
             cursor.execute(sql, (value,systemon,degreeOpening))
 
@@ -75,7 +75,7 @@ class MotionResource :
         self.connection.commit()
         # Show data log
         with self.connection.cursor() as cursor2:
-            sql = "SELECT * FROM coapsensorsmotion"
+            sql = "SELECT * FROM `coapsensorsmotion`"
             cursor2.execute(sql)
             results = cursor2.fetchall()
             header = results[0].keys()

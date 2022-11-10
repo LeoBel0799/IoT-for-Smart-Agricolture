@@ -1,5 +1,3 @@
-
-
 from coapthon.server.coap import CoAP
 from coapthon.resources.resource import Resource
 from coapthon.client.helperclient import HelperClient
@@ -39,10 +37,10 @@ class AlertResource :
             print("Detection mechanical cover degree status :")
             print(active)
             print(degreeOp)
-            self.active = active[0]
+            self.isClosed = active[0]
             self.degreeOpening = degreeOp[0];
             # when an intrusion occurs a query is executed
-            if self.closed == 'T':
+            if self.isClosed == 'T':
                 #response = self.client.post(self.actuator_resource,"state=1")
                 self.execute_query(1)
             else:
@@ -60,7 +58,7 @@ class AlertResource :
         self.connection.commit()
         # Show data log
         with self.connection.cursor() as cursor2:
-            sql = "SELECT * FROM coapsensorsalarm"
+            sql = "SELECT * FROM `coapsensorsalarm`"
             cursor2.execute(sql)
             results = cursor2.fetchall()
             header = results[0].keys()
