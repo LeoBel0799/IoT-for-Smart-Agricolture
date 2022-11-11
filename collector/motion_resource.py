@@ -38,14 +38,14 @@ class MotionResource :
             nodeData = json.loads(response.payload)
             # read from payload of client
             isClosed = nodeData["Closed"].split(" ")
-            active = nodeData["Active"].split(" ")
+            info = nodeData["info"].split(" ")
             degreeOpening = nodeData["Opening Degree"].split(" ")
             print("Detection value node :")
             print(isClosed)
-            print(active)
+            print(info)
             print(degreeOpening)
             self.isClosed = isClosed[0]
-            self.isActive = active[0]
+            self.isActive = info[0]
             self.degreeOpening = degreeOpening[0];
             # when occour an intrusion a query is executed
             if self.isClosed == 'T':
