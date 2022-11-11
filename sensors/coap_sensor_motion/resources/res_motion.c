@@ -11,10 +11,9 @@
 #define LOG_LEVEL LOG_LEVEL_DBG
 #define EVENT_INTERVAL 30
 
-// Modifica da 41 a 62
 static bool closedgate = false;
 static bool sysActive = false;
-static int openingDegree = 180;
+static int openingDegree = 90;
 
 static void res_get_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_event_handler(void);
@@ -38,10 +37,10 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     // T = true
     // N = negative
 
-    if(sysActive==true && openingDegree<180){
+    if(sysActive==true && openingDegree<90){
         openingDegree=openingDegree+10;
     }else if(sysActive==false){
-            openingDegree = 180;
+            openingDegree = 90;
     }
     if(closedgate==1){
         sysActive=true;
@@ -52,7 +51,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     char closed = closedgate == 1 ? 'T': 'N';
     strcpy(msg,"{\"Closed\":\"");
     strncat(msg,&closed,1);
-    strcat(msg,"\", \"Active\":\"");
+    strcat(msg,"\", \"info\":\"");
     strncat(msg,&active,1);
     strcat(msg,"\", \"Opening Degree\":\"");
     char degree[400];
