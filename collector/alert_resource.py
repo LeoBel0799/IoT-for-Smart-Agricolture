@@ -48,12 +48,12 @@ class AlertResource :
                 self.execute_query(0)
 
 
-    def execute_query(self , value):
+    def execute_query(self , forecast):
         print(self.connection)
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
             sql = "INSERT INTO `coapsensorsalarm`(`forecast`, `opening`) VALUES (%s, %s)"
-            cursor.execute(sql, (value, opening))
+            cursor.execute(sql, (forecast, opening))
         # connection is not autocommit by default. So you must commit to save
         # your changes.
         self.connection.commit()

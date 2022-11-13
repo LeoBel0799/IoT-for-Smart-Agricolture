@@ -60,14 +60,14 @@ class MotionResource :
 
 
 
-    def execute_query_cover(self, value):
+    def execute_query_cover(self, forecast):
 
         print(self.connection)
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
             activation = str(self.isActive)
             sql = "INSERT INTO `coapsensorsmotion` (`forecast`,`activation`,`opening`) VALUES (%s,%s,%s)"
-            cursor.execute(sql, (value,activation,opening))
+            cursor.execute(sql, (forecast,activation,opening))
 
 
         # connection is not autocommit by default. So you must commit to save
