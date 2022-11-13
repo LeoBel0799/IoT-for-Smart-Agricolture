@@ -72,7 +72,7 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
     if((len = coap_get_post_variable(request, "state", &state))) {
         if (atoi(state) == 1){
             if(isActive == true && opening < 90){
-                openingDegree = openingDegree + 10;
+                opening = opening + 10;
             }
             leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
             isActive = true;
