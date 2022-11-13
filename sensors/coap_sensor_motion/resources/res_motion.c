@@ -11,9 +11,9 @@
 #define LOG_LEVEL LOG_LEVEL_DBG
 #define EVENT_INTERVAL 30
 
-static bool closedgate = false;
-static bool sysActive = false;
-static int openingDegree = 90;
+static bool isClosed = false;
+static bool isActive = false;
+static int opening = 90;
 
 static void res_get_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_event_handler(void);
@@ -37,23 +37,23 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     // T = true
     // N = negative
 
-    if(sysActive==true && openingDegree<90){
-        openingDegree=openingDegree+10;
-    }else if(sysActive==false){
-            openingDegree = 90;
+    if(isActive==true && opening<90){
+        opening=opening+10;
+    }else if(isActive==false){
+            opening = 90;
     }
-    if(closedgate==1){
-        sysActive=true;
-    }else if (closedgate==0){
-        sysActive=false;
+    if(isClosed==1){
+        isActive=true;
+    }else if (isClosed==0){
+        isActive=false;
     }
-    char active = sysActive == 1 ? 'T': 'N';
-    char closed = closedgate == 1 ? 'T': 'N';
-    strcpy(msg,"{\"Closed\":\"");
+    char active = isActive == 1 ? 'T': 'N';
+    char closed = isClosed == 1 ? 'T': 'N';
+    strcpy(msg,"{\"isClosed\":\"");
     strncat(msg,&closed,1);
     strcat(msg,"\", \"info\":\"");
     strncat(msg,&active,1);
-    strcat(msg,"\", \"Opening Degree\":\"");
+    strcat(msg,"\", \"opening\":\"");
     char degree[400];
     sprintf(degree, "%d", openingDegree);
     strcat(msg,degree);
@@ -73,13 +73,13 @@ static void res_event_handler(void)
     srand(time(NULL));
     int random_v = rand() % 2;
 
-    bool newClosed = closedgate;
+    bool newClosed = isClosed;
     if(random_v == 0){
         newClosed=!closedgate;
     }
 
-    if(newClosed != closedgate){
-        closedgate = newClosed;
+    if(newClosed != isClosed){
+        isClosed = newClosed;
         // Notify all the observers
         coap_notify_observers(&motion_sensor);
     }

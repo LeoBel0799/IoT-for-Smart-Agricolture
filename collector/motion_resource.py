@@ -24,7 +24,7 @@ class MotionResource :
         self.resource = resource
         self.actuator_resource = "alert_actuator"
         self.isClosed = "F";
-        self.degreeOpening = 180;
+        self.opening = 90;
         self.isActive = "F";
         # Start observing for updates
         self.start_observing()
@@ -37,16 +37,16 @@ class MotionResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            isClosed = nodeData["Closed"].split(" ")
+            isClosed = nodeData["isClosed"].split(" ")
             info = nodeData["info"].split(" ")
-            degreeOpening = nodeData["Opening Degree"].split(" ")
+            opening = nodeData["opening"].split(" ")
             print("Detection value node :")
             print(isClosed)
             print(info)
-            print(degreeOpening)
+            print(opening)
             self.isClosed = isClosed[0]
             self.isActive = info[0]
-            self.degreeOpening = degreeOpening[0];
+            self.opening = opening[0];
             # when occour an intrusion a query is executed
             if self.isClosed == 'T':
                 response = self.client.post(self.actuator_resource,"state=1")
@@ -64,10 +64,10 @@ class MotionResource :
 
         print(self.connection)
         with self.connection.cursor() as cursor:
-            degreeOpening = str(self.degreeOpening)
-            systemon = str(self.isActive)
-            sql = "INSERT INTO `coapsensorsmotion` (`value`,`systemon`,`degreeOpening`) VALUES (%s,%s,%s)"
-            cursor.execute(sql, (value,systemon,degreeOpening))
+            opening = str(self.opening)
+            activation = str(self.isActive)
+            sql = "INSERT INTO `coapsensorsmotion` (`value`,`activation`,`opening`) VALUES (%s,%s,%s)"
+            cursor.execute(sql, (value,activation,opening))
 
 
         # connection is not autocommit by default. So you must commit to save

@@ -10,8 +10,8 @@
 #define LOG_MODULE "motion sensor"
 #define LOG_LEVEL LOG_LEVEL_DBG
 
-static bool sysActive = false;
-static int openingDegree = 90;
+static bool isActive = false;
+static int opening = 90;
 
 static void get_intensity_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void post_switch_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
@@ -41,9 +41,9 @@ static void get_intensity_handler(coap_message_t *request, coap_message_t *respo
     strcpy(msg,"{\"info\":\"");
     strncat(msg,&active,1);
     //strcat(msg,"\" \"");
-    strcat(msg,"\", \"Opening Degree\":\"");
+    strcat(msg,"\", \"opening\":\"");
     char degree[400];
-    sprintf(degree, "%d°", openingDegree);
+    sprintf(degree, "%d", opening);
     //printf("intensity: %s\n", intensity_str);
     strcat(msg,degree);
     strcat(msg,"\"}");
@@ -71,16 +71,16 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
     int check = 1;
     if((len = coap_get_post_variable(request, "state", &state))) {
         if (atoi(state) == 1){
-            if(sysActive == true && openingDegree < 90){
+            if(isActive == true && opening < 90){
                 openingDegree = openingDegree + 10;
             }
             leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
-            sysActive = true;
+            isActive = true;
         }
         else if(atoi(state) == 0){
             leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
-            sysActive = false;
-            openingDegree = 0;
+            isActive = false;
+            opening = 0;
         }
         else{
             check = 0;

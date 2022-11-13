@@ -19,7 +19,7 @@ class AlertResource :
         self.address = source_address
         self.resource = resource
         self.actuator_resource = "alert_actuator"
-        self.degreeOpening = 180;
+        self.opening = 90;
         self.isActive = "F";
         # Start observing for updates
         self.start_observing()
@@ -33,12 +33,12 @@ class AlertResource :
             nodeData = json.loads(response.payload)
             # read from payload of client
             info = nodeData["info"].split(" ")
-            degreeOp = nodeData["Opening Degree"].split(" ")
+            opening = nodeData["opening"].split(" ")
             print("Detection mechanical cover degree status :")
             print(info)
-            print(degreeOp)
+            print(opening)
             self.isClosed = info[0]
-            self.degreeOpening = degreeOp[0];
+            self.degreeOpening = opening[0];
             # when an intrusion occurs a query is executed
             if self.isClosed == 'T':
                 #response = self.client.post(self.actuator_resource,"state=1")
@@ -50,9 +50,9 @@ class AlertResource :
     def execute_query(self , value):
         print(self.connection)
         with self.connection.cursor() as cursor:
-            degreeOpening = str(self.degreeOpening)
-            sql = "INSERT INTO coapsensorsalarm (value, degreeOpening) VALUES (%s, %s)"
-            cursor.execute(sql, (value, degreeOpening))
+            opening = str(self.opening)
+            sql = "INSERT INTO `coapsensorsalarm`(`value`, `opening`) VALUES (%s, %s)"
+            cursor.execute(sql, (value, opening))
         # connection is not autocommit by default. So you must commit to save
         # your changes.
         self.connection.commit()
