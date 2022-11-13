@@ -75,7 +75,7 @@ static void res_event_handler(void)
 
     bool newClosed = isClosed;
     if(random_v == 0){
-        newClosed=!isCloseù;
+        newClosed=!isClosed;
     }
 
     if(newClosed != isClosed){

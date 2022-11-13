@@ -47,6 +47,7 @@ class AlertResource :
                 #response = self.client.post(self.actuator_resource,"state=1")
                 self.execute_query(0)
 
+
     def execute_query(self , value):
         print(self.connection)
         with self.connection.cursor() as cursor:
