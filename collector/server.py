@@ -63,4 +63,3 @@ class AdvancedResourceAlert(Resource):
         moteInfo["Source"] = request.source
         alertResource = AlertResource(moteInfo["Source"],moteInfo["Resource"])
         return self, response
-

@@ -55,7 +55,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     strncat(msg,&active,1);
     strcat(msg,"\", \"opening\":\"");
     char degree[400];
-    sprintf(degree, "%d", openingDegree);
+    sprintf(degree, "%d", opening);
     strcat(msg,degree);
     strcat(msg,"\"}");
     length = strlen(msg);
@@ -75,7 +75,7 @@ static void res_event_handler(void)
 
     bool newClosed = isClosed;
     if(random_v == 0){
-        newClosed=!closedgate;
+        newClosed=!isCloseù;
     }
 
     if(newClosed != isClosed){
