@@ -55,7 +55,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     strncat(msg,&active,1);
     strcat(msg,"\", \"opening\":\"");
     char degree[400];
-    sprintf(degree, "%s", opening);
+    sprintf(degree, "%d", opening);
     strcat(msg,degree);
     strcat(msg,"\"}");
     length = strlen(msg);
