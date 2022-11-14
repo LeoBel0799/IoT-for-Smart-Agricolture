@@ -38,7 +38,7 @@ static void get_intensity_handler(coap_message_t *request, coap_message_t *respo
     // T = true
     // N = negative
     char active = isActive == true ? 'T': 'N';
-    strcpy(msg,"{\"info\":\"");
+    strcpy(msg,"{\"active\":\"");
     strncat(msg,&active,1);
     //strcat(msg,"\" \"");
     strcat(msg,"\", \"opening\":\"");

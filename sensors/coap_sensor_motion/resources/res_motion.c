@@ -49,13 +49,13 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     }
     char active = isActive == 1 ? 'T': 'N';
     char closed = isClosed == 1 ? 'T': 'N';
-    strcpy(msg,"{\"isClosed\":\"");
+    strcpy(msg,"{\"closed\":\"");
     strncat(msg,&closed,1);
-    strcat(msg,"\", \"info\":\"");
+    strcat(msg,"\", \"active\":\"");
     strncat(msg,&active,1);
     strcat(msg,"\", \"opening\":\"");
     char degree[400];
-    sprintf(degree, "%d", opening);
+    sprintf(degree, "%s", opening);
     strcat(msg,degree);
     strcat(msg,"\"}");
     length = strlen(msg);

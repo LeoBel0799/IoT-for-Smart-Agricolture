@@ -32,12 +32,12 @@ class AlertResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            info = nodeData["info"].split(" ")
+            active = nodeData["active"].split(" ")
             opening = nodeData["opening"].split(" ")
             print("Detection mechanical cover degree status :")
-            print(info)
+            print(active)
             print(opening)
-            self.isClosed = info[0]
+            self.isClosed = active[0]
             self.opening = opening[0];
             # when an intrusion occurs a query is executed
             if self.isClosed == 'T':
@@ -48,12 +48,12 @@ class AlertResource :
                 self.execute_query(0)
 
 
-    def execute_query(self , forecast):
+    def execute_query(self , value):
         print(self.connection)
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
-            sql = "INSERT INTO `coapsensorsalarm`(`forecast`, `opening`) VALUES (%s, %s)"
-            cursor.execute(sql, (forecast, opening))
+            sql = "INSERT INTO `coapsensorsalarm`(`value`, `opening`) VALUES (%s, %s)"
+            cursor.execute(sql, (value, opening))
         # connection is not autocommit by default. So you must commit to save
         # your changes.
         self.connection.commit()

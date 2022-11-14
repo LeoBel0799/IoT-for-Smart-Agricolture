@@ -37,15 +37,15 @@ class MotionResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            isClosed = nodeData["isClosed"].split(" ")
-            info = nodeData["info"].split(" ")
+            isClosed = nodeData["closed"].split(" ")
+            active = nodeData["active"].split(" ")
             opening = nodeData["opening"].split(" ")
             print("Detection value node :")
             print(isClosed)
-            print(info)
+            print(active)
             print(opening)
             self.isClosed = isClosed[0]
-            self.isActive = info[0]
+            self.isActive = active[0]
             self.opening = opening[0];
             # when occour an intrusion a query is executed
             if self.isClosed == 'T':
@@ -60,14 +60,14 @@ class MotionResource :
 
 
 
-    def execute_query_cover(self, forecast):
+    def execute_query_cover(self, value):
 
         print(self.connection)
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
             activation = str(self.isActive)
-            sql = "INSERT INTO `coapsensorsmotion` (`forecast`,`activation`,`opening`) VALUES (%s,%s,%s)"
-            cursor.execute(sql, (forecast,activation,opening))
+            sql = "INSERT INTO `coapsensorsmotion` (`value`,`activation`,`opening`) VALUES (%s,%s,%s)"
+            cursor.execute(sql, (value,activation,opening))
 
 
         # connection is not autocommit by default. So you must commit to save
