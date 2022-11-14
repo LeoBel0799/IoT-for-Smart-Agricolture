@@ -54,14 +54,14 @@ struct httpd_state;
 typedef char (*httpd_simple_script_t)(struct httpd_state *s);
 
 struct httpd_state {
-  struct timer timer;
-  struct psock sin, sout;
-  struct pt outputpt;
-  char inputbuf[HTTPD_PATHLEN + 24];
+    struct timer timer;
+    struct psock sin, sout;
+    struct pt outputpt;
+    char inputbuf[HTTPD_PATHLEN + 24];
 /*char outputbuf[UIP_TCP_MSS]; */
-  char filename[HTTPD_PATHLEN];
-  httpd_simple_script_t script;
-  char state;
+    char filename[HTTPD_PATHLEN];
+    httpd_simple_script_t script;
+    char state;
 };
 
 void httpd_init(void);

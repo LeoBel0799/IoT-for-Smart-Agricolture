@@ -62,48 +62,48 @@ static int blen;
 static void
 ipaddr_add(const uip_ipaddr_t *addr)
 {
-  uint16_t a;
-  int i, f;
-  for(i = 0, f = 0; i < sizeof(uip_ipaddr_t); i += 2) {
-    a = (addr->u8[i] << 8) + addr->u8[i + 1];
-    if(a == 0 && f >= 0) {
-      if(f++ == 0) {
-        ADD("::");
-      }
-    } else {
-      if(f > 0) {
-        f = -1;
-      } else if(i > 0) {
-        ADD(":");
-      }
-      ADD("%x", a);
+    uint16_t a;
+    int i, f;
+    for(i = 0, f = 0; i < sizeof(uip_ipaddr_t); i += 2) {
+        a = (addr->u8[i] << 8) + addr->u8[i + 1];
+        if(a == 0 && f >= 0) {
+            if(f++ == 0) {
+                ADD("::");
+            }
+        } else {
+            if(f > 0) {
+                f = -1;
+            } else if(i > 0) {
+                ADD(":");
+            }
+            ADD("%x", a);
+        }
     }
-  }
 }
 /*---------------------------------------------------------------------------*/
 static
 PT_THREAD(generate_routes(struct httpd_state *s))
 {
-  static uip_ds6_nbr_t *nbr;
+    static uip_ds6_nbr_t *nbr;
 
-  PSOCK_BEGIN(&s->sout);
-  SEND_STRING(&s->sout, TOP);
+    PSOCK_BEGIN(&s->sout);
+    SEND_STRING(&s->sout, TOP);
 
-  ADD("  Neighbors\n  <ul>\n");
-  SEND(&s->sout);
-  for(nbr = uip_ds6_nbr_head();
-      nbr != NULL;
-      nbr = uip_ds6_nbr_next(nbr)) {
-    ADD("    <li>");
-    ipaddr_add(&nbr->ipaddr);
-    ADD("</li>\n");
+    ADD("  Neighbors\n  <ul>\n");
     SEND(&s->sout);
-  }
-  ADD("  </ul>\n");
-  SEND(&s->sout);
+    for(nbr = uip_ds6_nbr_head();
+        nbr != NULL;
+        nbr = uip_ds6_nbr_next(nbr)) {
+        ADD("    <li>");
+        ipaddr_add(&nbr->ipaddr);
+        ADD("</li>\n");
+        SEND(&s->sout);
+    }
+    ADD("  </ul>\n");
+    SEND(&s->sout);
 
 #if (UIP_MAX_ROUTES != 0)
-  {
+    {
     static uip_ds6_route_t *r;
     ADD("  Routes\n  <ul>\n");
     SEND(&s->sout);
@@ -122,7 +122,7 @@ PT_THREAD(generate_routes(struct httpd_state *s))
 #endif /* UIP_MAX_ROUTES != 0 */
 
 #if (UIP_SR_LINK_NUM != 0)
-  if(uip_sr_num_nodes() > 0) {
+    if(uip_sr_num_nodes() > 0) {
     static uip_sr_node_t *link;
     ADD("  Routing links\n  <ul>\n");
     SEND(&s->sout);
@@ -150,29 +150,29 @@ PT_THREAD(generate_routes(struct httpd_state *s))
   }
 #endif /* UIP_SR_LINK_NUM != 0 */
 
-  SEND_STRING(&s->sout, BOTTOM);
+    SEND_STRING(&s->sout, BOTTOM);
 
-  PSOCK_END(&s->sout);
+    PSOCK_END(&s->sout);
 }
 /*---------------------------------------------------------------------------*/
 PROCESS(webserver_nogui_process, "Web server");
 PROCESS_THREAD(webserver_nogui_process, ev, data)
 {
-  PROCESS_BEGIN();
+PROCESS_BEGIN();
 
-  httpd_init();
+httpd_init();
 
-  while(1) {
-    PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
-    httpd_appcall(data);
-  }
+while(1) {
+PROCESS_WAIT_EVENT_UNTIL(ev == tcpip_event);
+httpd_appcall(data);
+}
 
-  PROCESS_END();
+PROCESS_END();
 }
 /*---------------------------------------------------------------------------*/
 httpd_simple_script_t
 httpd_simple_get_script(const char *name)
 {
-  return generate_routes;
+    return generate_routes;
 }
 /*---------------------------------------------------------------------------*/
