@@ -40,7 +40,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     if(isActive==true && opening<90){
         opening=opening+10;
     }else if(isActive==false){
-            opening = 90;
+        opening = 90;
     }
     if(isClosed==1){
         isActive=true;

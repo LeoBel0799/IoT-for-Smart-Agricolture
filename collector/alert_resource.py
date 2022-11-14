@@ -38,7 +38,7 @@ class AlertResource :
             print(info)
             print(opening)
             self.isClosed = info[0]
-            self.degreeOpening = opening[0];
+            self.opening = opening[0];
             # when an intrusion occurs a query is executed
             if self.isClosed == 'T':
                 #response = self.client.post(self.actuator_resource,"state=1")
