@@ -46,6 +46,8 @@ class AlertResource :
             else:
                 #response = self.client.post(self.actuator_resource,"state=1")
                 self.execute_query(0)
+        else:
+            print("Payload empty")
 
 
     def execute_query(self , value):

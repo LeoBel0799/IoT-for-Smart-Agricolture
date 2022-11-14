@@ -56,6 +56,7 @@ class MotionResource :
                 response = self.client.post(self.actuator_resource,"state=0")
                 self.execute_query_cover(0)
         else:
+            print("Payload empty")
             return;
 
 
