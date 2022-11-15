@@ -41,7 +41,7 @@ static char *broker_ip = MQTT_CLIENT_BROKER_IP_ADDR;
 /* Various states */
 static uint8_t state;
 
-#define STATE_INIT              0 // Initial state
+#define STATE_INIT            0 // Initial state
 #define STATE_NET_OK          1 // Network is initialized
 #define STATE_CONNECTING      2 // Connecting to MQTT broker
 #define STATE_CONNECTED       3  // Connection successful
@@ -96,8 +96,7 @@ static char client_id[BUFFER_SIZE];
 static char pub_topic[BUFFER_SIZE];
 
 /*---------------------------------------------------------------------------*/
-PROCESS(mqtt_client_process,
-"MQTT Client");
+PROCESS(mqtt_client_process,"MQTT Client");
 
 /*---------------------------------------------------------------------------*/
 static void pub_handler(const char *topic, uint16_t topic_len, const uint8_t *chunk,
@@ -133,16 +132,16 @@ static void mqtt_event(struct mqtt_connection *m, mqtt_event_t event, void *data
                         msg_ptr->payload_chunk, msg_ptr->payload_length);
             break;
         case MQTT_EVENT_SUBACK:
-#if MQTT_311
+        #if MQTT_311
             mqtt_suback_event_t *suback_event = (mqtt_suback_event_t *)data;
             if(suback_event->success) {
             printf("Application is subscribed to topic successfully\n");
             } else {
             printf("Application failed to subscribe to topic (ret code %x)\n", suback_event->return_code);
             }
-#else
+        #else
             printf("Application is subscribed to topic successfully\n");
-#endif
+        #endif
             break;
         case MQTT_EVENT_UNSUBACK:
             printf("Application is unsubscribed to topic successfully\n");
@@ -164,8 +163,8 @@ static bool have_connectivity() {
 }
 /*---------------------------------------------------------------------------*/
 //SUBSCRIBER
-PROCESS_THREAD(mqtt_client_process, ev, data){
-PROCESS_BEGIN();
+PROCESS_THREAD(mqtt_client_process,ev, data){
+    PROCESS_BEGIN();
 
 //mqtt_status_t status;
 char broker_address[CONFIG_IP_ADDR_STR_LEN];
@@ -173,8 +172,7 @@ char broker_address[CONFIG_IP_ADDR_STR_LEN];
 printf("MQTT Client Process\n");
 
 // Initialize the ClientID as MAC address
-snprintf(client_id,
-BUFFER_SIZE, "%02x%02x%02x%02x%02x%02x",
+snprintf(client_id, BUFFER_SIZE, "%02x%02x%02x%02x%02x%02x",
 linkaddr_node_addr.u8[0], linkaddr_node_addr.u8[1],
 linkaddr_node_addr.u8[2], linkaddr_node_addr.u8[5],
 linkaddr_node_addr.u8[6], linkaddr_node_addr.u8[7]);

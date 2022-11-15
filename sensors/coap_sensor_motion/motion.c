@@ -97,7 +97,7 @@ PROCESS_THREAD(coap_client, ev, data){
                 coap_set_payload(request, (uint8_t*) msg, strlen(msg));
                 COAP_BLOCKING_REQUEST(&server_ep, request, response_handler);
                 registered = true;
-                leds_toggle(LEDS_GREEN);
+                leds_toggle(LEDS_RED);
                 break;
             }
 
@@ -117,7 +117,7 @@ PROCESS_THREAD(sensor_node, ev, data){
 
     button_hal_button_t *btn;
 	PROCESS_BEGIN();
-	coap_activate_resource(&motion_sensor, "motion_sensor");
+	coap_activate_resource(&motion_sensor, "motion_resource");
     coap_activate_resource(&alert_actuator, "alert_actuator");
     btn = button_hal_get_by_index(0);
 

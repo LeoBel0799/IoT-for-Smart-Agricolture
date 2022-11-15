@@ -20,7 +20,7 @@ static void res_event_handler(void);
 
 
 EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"motion_sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
 NULL,

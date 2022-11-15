@@ -20,7 +20,7 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
 //qui costruisco la response che devo dare al client
 
 RESOURCE(alert_actuator, //--> name
-"title=\"alarm_actuator: ?POST\";obs;rt=\"alarm\"",
+"title=\"alarm actuator: ?POST\";obs;rt=\"alarm\"",
 get_opening_handler,
 post_switch_handler,
 NULL,

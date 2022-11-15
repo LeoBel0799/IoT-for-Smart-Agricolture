@@ -23,7 +23,7 @@ class MotionResource :
         print("Conncected to Collector DB")
         self.address = source_address
         self.resource = resource
-        self.actuator_resource = "motion_sensor"
+        self.actuator_resource = "alert_actuator"
         self.isClosed = "F";
         self.opening = 90;
         self.isActive = "F";
@@ -52,17 +52,17 @@ class MotionResource :
             if self.isClosed == 'T':
                 response = self.client.post(self.actuator_resource,"state=1")
                 # query quando è aperto
-                self.execute_query_cover(1)
+                self.execute_query_motion(1)
             else:
                 response = self.client.post(self.actuator_resource,"state=0")
-                self.execute_query_cover(0)
+                self.execute_query_motion(0)
         else:
             print("Payload empty")
             return;
 
 
 
-    def execute_query_cover(self, value):
+    def execute_query_motion(self, value):
 
         print(self.connection)
         with self.connection.cursor() as cursor:
