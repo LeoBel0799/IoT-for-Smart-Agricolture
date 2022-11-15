@@ -32,7 +32,7 @@ class CoAPServer(CoAP):
         # Register resource: server behave as client in order to get the registration
         print("adding resource");
         self.add_resource("registration", AdvancedResource())
-
+        print("After coap")
 
 class MqttClient():
     # Define on connect event function

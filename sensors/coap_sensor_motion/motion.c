@@ -117,7 +117,7 @@ PROCESS_THREAD(sensor_node, ev, data){
 
     button_hal_button_t *btn;
 	PROCESS_BEGIN();
-	coap_activate_resource(&motion_sensor, "motion_resource");
+	coap_activate_resource(&motion_sensor, "motion_sensor");
     coap_activate_resource(&alert_actuator, "alert_actuator");
     btn = button_hal_get_by_index(0);
 

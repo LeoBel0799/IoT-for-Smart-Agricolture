@@ -23,6 +23,7 @@ registeredUsersDict = {}
 class AdvancedResource(Resource):
 
     def __init__(self, name="Advanced"):
+        print("Prima di advanced resource")
         super(AdvancedResource, self).__init__(name)
         self.payload = "Successful registration"
     def render_GET_advanced(self, request, response):
