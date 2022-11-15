@@ -115,7 +115,7 @@ mqtt_thread.start()
 server = CoAPServer(ip, port)
 try:
     print("Listening server")
-    server.listen(100)
+    server.listen(500)
 except KeyboardInterrupt:
     print("Server Shutdown")
     mqttc.kill()
