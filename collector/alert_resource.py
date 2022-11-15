@@ -16,6 +16,7 @@ class AlertResource :
         # Initialize mote resource fields
         self.db = Database()
         self.connection = self.db.connect_dbs()
+        print("Conncected to Collector DB")
         self.address = source_address
         self.resource = resource
         self.actuator_resource = "alert_actuator"
@@ -23,7 +24,7 @@ class AlertResource :
         self.isActive = "F";
         # Start observing for updates
         self.start_observing()
-        print("Mechanical cover actuator initialized")
+        print("Alert resource initialized")
 
 
     def presence_callback_observer(self, response):

@@ -20,15 +20,16 @@ class MotionResource :
         # Initialize mote resource fields
         self.db = Database()
         self.connection = self.db.connect_dbs()
+        print("Conncected to Collector DB")
         self.address = source_address
         self.resource = resource
-        self.actuator_resource = "alert_actuator"
+        self.actuator_resource = "motion_sensor"
         self.isClosed = "F";
         self.opening = 90;
         self.isActive = "F";
         # Start observing for updates
         self.start_observing()
-        print("Mechanical Cover inizitialized")
+        print("Motion resource inizitialized")
 
     def presence_callback_observer(self, response):
         print("Callback called, resource arrived")

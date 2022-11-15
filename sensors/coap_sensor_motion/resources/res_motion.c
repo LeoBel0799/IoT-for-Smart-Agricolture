@@ -20,7 +20,7 @@ static void res_event_handler(void);
 
 
 EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+"title=\"motion_sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
 NULL,
@@ -47,12 +47,12 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     }else if (isClosed==0){
         isActive=false;
     }
-    char active = isActive == 1 ? 'T': 'N';
-    char closed = isClosed == 1 ? 'T': 'N';
+    char value1 = isActive == 1 ? 'T': 'N';
+    char value2 = isClosed == 1 ? 'T': 'N';
     strcpy(msg,"{\"closed\":\"");
-    strncat(msg,&closed,1);
+    strncat(msg,&value2,1);
     strcat(msg,"\", \"active\":\"");
-    strncat(msg,&active,1);
+    strncat(msg,&value1,1);
     strcat(msg,"\", \"opening\":\"");
     char degree[400];
     sprintf(degree, "%d", opening);

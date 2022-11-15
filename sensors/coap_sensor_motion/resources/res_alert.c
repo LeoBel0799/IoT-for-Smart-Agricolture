@@ -20,15 +20,15 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
 //qui costruisco la response che devo dare al client
 
 RESOURCE(alert_actuator, //--> name
-"title=\"alarm actuator: ?POST\";obs;rt=\"alarm\"",
-get_intensity_handler,
+"title=\"alarm_actuator: ?POST\";obs;rt=\"alarm\"",
+get_opening_handler,
 post_switch_handler,
 NULL,
 NULL); //--> handler invoke auto  every time the state of resource change
 
 //get per sapere lo stato
-// Modificare da 37 a 51
-static void get_intensity_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+// Modificare da p37 a 51
+static void get_opening_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
     // Create a JSON message with the detected presence value and led value
     // In both the resources the get_handler return the current sensor values
@@ -37,9 +37,9 @@ static void get_intensity_handler(coap_message_t *request, coap_message_t *respo
     char msg[300];
     // T = true
     // N = negative
-    char active = isActive == true ? 'T': 'N';
+    char value2 = isActive == true ? 'T': 'N';
     strcpy(msg,"{\"active\":\"");
-    strncat(msg,&active,1);
+    strncat(msg,&value2,1);
     //strcat(msg,"\" \"");
     strcat(msg,"\", \"opening\":\"");
     char degree[400];
