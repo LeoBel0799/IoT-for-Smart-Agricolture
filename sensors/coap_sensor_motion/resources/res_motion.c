@@ -30,8 +30,6 @@ res_event_handler); //--> handler invoke auto  every time the state of resource 
 static void res_get_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
 
-    coap_notify_observers(&motion_sensor);
-    motion_sensor.trigger();
     // Create a JSON message with the detected presence value and led value
     // In both the resources the get_handler return the current sensor values
     int length;
@@ -86,6 +84,7 @@ static void res_event_handler(void)
         isClosed = newClosed;
         // Notify all the observers
         coap_notify_observers(&motion_sensor);
+        motion_sensor.trigger();
     }
 
 }
