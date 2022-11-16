@@ -67,16 +67,16 @@ static int whether = 0;
 
 
 // Periodic timer to check the state of the MQTT client
-#define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 30
+#define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 60
 static struct etimer periodic_timer;
 
-#define PERIODIC_TIMER 30
+#define PERIODIC_TIMER 60
 /*---------------------------------------------------------------------------*/
 /*
  * The main MQTT buffers.
  * We will need to increase if we start publishing more data.
  */
-#define APP_BUFFER_SIZE 512
+#define APP_BUFFER_SIZE 4096
 static char app_buffer[APP_BUFFER_SIZE];
 /*---------------------------------------------------------------------------*/
 static struct mqtt_message *msg_ptr = 0;
