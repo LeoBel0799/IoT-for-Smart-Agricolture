@@ -80,7 +80,7 @@ static struct etimer periodic_timer;
  * The main MQTT buffers.
  * We will need to increase if we start publishing more data.
  */
-#define APP_BUFFER_SIZE 512
+#define APP_BUFFER_SIZE 1024
 static char app_buffer[APP_BUFFER_SIZE];
 /*---------------------------------------------------------------------------*/
 static struct mqtt_message *msg_ptr = 0;
@@ -94,7 +94,7 @@ static struct mqtt_connection conn;
  * Buffers for Client ID and Topics.
  * Make sure they are large enough to hold the entire respective string
  */
-#define BUFFER_SIZE 128
+#define BUFFER_SIZE 256
 static char client_id[BUFFER_SIZE];
 static char pub_topic[BUFFER_SIZE];
 
