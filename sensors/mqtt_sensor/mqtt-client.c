@@ -30,11 +30,12 @@
 /* MQTT broker address. */
 #define MQTT_CLIENT_BROKER_IP_ADDR "fd00::1"
 
-static char *broker_ip = MQTT_CLIENT_BROKER_IP_ADDR;
+static const char *broker_ip = MQTT_CLIENT_BROKER_IP_ADDR;
 
 // Default config values
 #define DEFAULT_BROKER_PORT         1883
 #define DEFAULT_PUBLISH_INTERVAL    (30 * CLOCK_SECOND)
+
 
 
 /*---------------------------------------------------------------------------*/
@@ -57,6 +58,9 @@ AUTOSTART_PROCESSES(&mqtt_client_process);
 #define MAX_TCP_SEGMENT_SIZE    32
 #define CONFIG_IP_ADDR_STR_LEN   64
 
+static char broker_address[CONFIG_IP_ADDR_STR_LEN];
+
+
 static int temperature = 0;
 static int humidity = 0;
 static char forecast[4][150] = {"Sunny", "Cloudly", "Heavy rain", "Icy"};
@@ -67,16 +71,16 @@ static int whether = 0;
 
 
 // Periodic timer to check the state of the MQTT client
-#define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 60
+#define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 15
 static struct etimer periodic_timer;
 
-#define PERIODIC_TIMER 60
+#define PERIODIC_TIMER 20
 /*---------------------------------------------------------------------------*/
 /*
  * The main MQTT buffers.
  * We will need to increase if we start publishing more data.
  */
-#define APP_BUFFER_SIZE 4096
+#define APP_BUFFER_SIZE 512
 static char app_buffer[APP_BUFFER_SIZE];
 /*---------------------------------------------------------------------------*/
 static struct mqtt_message *msg_ptr = 0;
@@ -94,6 +98,9 @@ static struct mqtt_connection conn;
 
 static char client_id[BUFFER_SIZE];
 static char pub_topic[BUFFER_SIZE];
+
+
+// Periodic timer to check the state of the MQTT client
 
 /*---------------------------------------------------------------------------*/
 PROCESS(mqtt_client_process,"MQTT Client");
@@ -166,8 +173,6 @@ static bool have_connectivity() {
 PROCESS_THREAD(mqtt_client_process,ev, data){
     PROCESS_BEGIN();
 
-//mqtt_status_t status;
-char broker_address[CONFIG_IP_ADDR_STR_LEN];
 
 printf("MQTT Client Process\n");
 
@@ -209,7 +214,14 @@ while(1) {
     }
 
     if(state==STATE_CONNECTED){
-        printf("Check connected\n");
+        // Subscribe to a topic
+        strcpy(pub_topic,"actuator");
+        state = mqtt_subscribe(&conn, NULL, pub_topic,MQTT_QOS_LEVEL_0);
+        printf("Subscribing\n");
+        if (state == MQTT_STATUS_OUT_QUEUE_FULL){
+            LOG_ERR("Tried to subscribe but commmand queue was full!\n");
+            PROCESS_EXIT();
+        }
         state = STATE_SUBSCRIBED;
     }
 
