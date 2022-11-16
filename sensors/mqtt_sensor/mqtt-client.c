@@ -71,10 +71,10 @@ static int whether = 0;
 
 
 // Periodic timer to check the state of the MQTT client
-#define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 15
+#define STATE_MACHINE_PERIODIC  CLOCK_SECOND * 30
 static struct etimer periodic_timer;
 
-#define PERIODIC_TIMER 20
+#define PERIODIC_TIMER 30
 /*---------------------------------------------------------------------------*/
 /*
  * The main MQTT buffers.
@@ -94,8 +94,7 @@ static struct mqtt_connection conn;
  * Buffers for Client ID and Topics.
  * Make sure they are large enough to hold the entire respective string
  */
-#define BUFFER_SIZE 64
-
+#define BUFFER_SIZE 128
 static char client_id[BUFFER_SIZE];
 static char pub_topic[BUFFER_SIZE];
 
@@ -108,8 +107,7 @@ PROCESS(mqtt_client_process,"MQTT Client");
 /*---------------------------------------------------------------------------*/
 static void pub_handler(const char *topic, uint16_t topic_len, const uint8_t *chunk,
                         uint16_t chunk_len) {
-   // printf("Pub Handler: topic='%s' (len=%u), chunk_len=%u\n", topic,
-    //       topic_len, chunk_len);
+    printf("Pub Handler: topic='%s' (len=%u), chunk_len=%u\n", topic, topic_len, chunk_len);
 
     if (strcmp(topic, "actuator") == 0) {
         printf("Received Actuator command\n");
