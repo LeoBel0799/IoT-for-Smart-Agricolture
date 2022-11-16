@@ -84,7 +84,6 @@ static void res_event_handler(void)
         isClosed = newClosed;
         // Notify all the observers
         coap_notify_observers(&motion_sensor);
-        motion_sensor.trigger();
     }
 
 }

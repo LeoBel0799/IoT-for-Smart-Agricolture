@@ -213,7 +213,7 @@ while(1) {
 
     if(state==STATE_CONNECTED){
         // Subscribe to a topic
-        strcpy(pub_topic,"actuator");
+        strcpy(pub_topic,"info");
         state = mqtt_subscribe(&conn, NULL, pub_topic,MQTT_QOS_LEVEL_0);
         printf("Subscribing\n");
         if (state == MQTT_STATUS_OUT_QUEUE_FULL){
