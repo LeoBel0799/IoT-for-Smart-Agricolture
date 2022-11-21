@@ -23,7 +23,7 @@ class MotionResource :
         print("Conncected to Collector DB")
         self.address = source_address
         self.resource = resource
-        self.actuator_resource = "alert_actuator"
+        self.actuator_resource = "motion_sensor"
         self.isClosed = "F";
         self.opening = 90;
         self.isActive = "F";
@@ -39,14 +39,14 @@ class MotionResource :
             nodeData = json.loads(response.payload)
             # read from payload of client
             isClosed = nodeData["closed"].split(" ")
-            active = nodeData["active"].split(" ")
+            info = nodeData["info"].split(" ")
             opening = nodeData["opening"].split(" ")
             print("Detection value node :")
             print(isClosed)
-            print(active)
+            print(info)
             print(opening)
             self.isClosed = isClosed[0]
-            self.isActive = active[0]
+            self.isActive = info[0]
             self.opening = opening[0];
             # when occour an intrusion a query is executed
             if self.isClosed == 'T':

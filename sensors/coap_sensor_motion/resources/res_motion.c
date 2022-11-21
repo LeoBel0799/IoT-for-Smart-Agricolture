@@ -9,7 +9,7 @@
 #include "sys/log.h"
 #define LOG_MODULE "motion sensor"
 #define LOG_LEVEL LOG_LEVEL_DBG
-#define EVENT_INTERVAL 30
+#define EVENT_INTERVAL 40
 
 static bool isClosed = false;
 static bool isActive = false;
@@ -20,7 +20,7 @@ static void res_event_handler(void);
 
 
 EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+"title=\"motion_sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
 NULL,
@@ -52,7 +52,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     char value2 = isClosed == 1 ? 'T': 'N';
     strcpy(msg,"{\"closed\":\"");
     strncat(msg,&value2,1);
-    strcat(msg,"\", \"active\":\"");
+    strcat(msg,"\", \"info\":\"");
     strncat(msg,&value1,1);
     strcat(msg,"\", \"opening\":\"");
     char degree[400];

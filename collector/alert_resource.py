@@ -33,12 +33,12 @@ class AlertResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            active = nodeData["active"].split(" ")
+            info = nodeData["info"].split(" ")
             opening = nodeData["opening"].split(" ")
             print("Detection mechanical cover degree status :")
-            print(active)
+            print(info)
             print(opening)
-            self.isClosed = active[0]
+            self.isClosed = info[0]
             self.opening = opening[0];
             # when an intrusion occurs a query is executed
             if self.isClosed == 'T':

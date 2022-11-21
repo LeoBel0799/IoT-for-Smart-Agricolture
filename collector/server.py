@@ -22,9 +22,8 @@ registeredUsersDict = {}
 
 class AdvancedResource(Resource):
 
-    def __init__(self, name="Advanced"):
-        print("Prima di advanced resource")
-        super(AdvancedResource, self).__init__(name)
+    def __init__(self, name="Advanced", coap_server=None):
+        super(AdvancedResource, self).__init__(name, coap_server, visible=True, observable=True, allow_children=True)
         self.payload = "Successful registration"
     def render_GET_advanced(self, request, response):
         print("GET server, received message:\n")

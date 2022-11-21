@@ -20,7 +20,7 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
 //qui costruisco la response che devo dare al client
 
 RESOURCE(alert_actuator, //--> name
-"title=\"alarm actuator: ?POST\";obs;rt=\"alarm\"",
+"title=\"alert_actuator: ?POST\";obs;rt=\"alarm\"",
 get_opening_handler,
 post_switch_handler,
 NULL,
@@ -38,7 +38,7 @@ static void get_opening_handler(coap_message_t *request, coap_message_t *respons
     // T = true
     // N = negative
     char value2 = isActive == true ? 'T': 'N';
-    strcpy(msg,"{\"active\":\"");
+    strcpy(msg,"{\"info\":\"");
     strncat(msg,&value2,1);
     //strcat(msg,"\" \"");
     strcat(msg,"\", \"opening\":\"");
