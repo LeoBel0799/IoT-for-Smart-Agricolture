@@ -20,7 +20,7 @@ static void post_switch_handler(coap_message_t *request, coap_message_t *respons
 //qui costruisco la response che devo dare al client
 
 RESOURCE(alert_actuator, //--> name
-"title=\"alert_actuator: ?POST\";obs;rt=\"alarm\"",
+"title=\"alarm_actuator: ?POST\";obs;rt=\"alarm\"",
 get_opening_handler,
 post_switch_handler,
 NULL,
@@ -33,7 +33,6 @@ static void get_opening_handler(coap_message_t *request, coap_message_t *respons
     // Create a JSON message with the detected presence value and led value
     // In both the resources the get_handler return the current sensor values
     int length;
-
     char msg[300];
     // T = true
     // N = negative

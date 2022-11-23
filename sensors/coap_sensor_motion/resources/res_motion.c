@@ -20,7 +20,7 @@ static void res_event_handler(void);
 
 
 EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"motion_sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
 res_get_handler, //--> handler
 NULL,
 NULL,
@@ -66,12 +66,10 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     coap_set_header_content_format(response, TEXT_PLAIN);
     coap_set_header_etag(response, (uint8_t *)&length, 1);
     coap_set_payload(response, (uint8_t *)buffer, length);
-
-
 }
 
-static void res_event_handler(void)
-{
+
+static void res_event_handler(void){
     srand(time(NULL));
     int random_v = rand() % 2;
 
@@ -85,5 +83,4 @@ static void res_event_handler(void)
         // Notify all the observers
         coap_notify_observers(&motion_sensor);
     }
-
 }

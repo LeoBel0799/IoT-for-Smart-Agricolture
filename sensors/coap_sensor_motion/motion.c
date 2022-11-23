@@ -74,7 +74,6 @@ PROCESS_THREAD(coap_client, ev, data){
 
     PROCESS_BEGIN();
     coap_endpoint_parse(SERVER_EP, strlen(SERVER_EP), &server_ep);
-
     etimer_set(&register_timer, TOGGLE_INTERVAL * CLOCK_SECOND);
 
     while(1) {
@@ -86,13 +85,10 @@ PROCESS_THREAD(coap_client, ev, data){
 
             if(NETSTACK_ROUTING.node_is_reachable() && NETSTACK_ROUTING.get_root_ipaddr(&dest_ipaddr)){
                 printf("--Registration--\n");
-
                 coap_init_message(request, COAP_TYPE_CON, COAP_GET, 0);
                 coap_set_header_uri_path(request, (const char *)&SERVER_REGISTRATION);
                 char msg[300];
                 strcpy(msg, "{\"Resource\":\"motion_resource\"}");
-                //strcat(msg, SENSOR_TYPE);
-                //strcat(msg, "}");
                 printf("MSG registration motion.c : %s\n", msg);
                 coap_set_payload(request, (uint8_t*) msg, strlen(msg));
                 COAP_BLOCKING_REQUEST(&server_ep, request, response_handler);
@@ -111,8 +107,9 @@ PROCESS_THREAD(coap_client, ev, data){
     LOG_INFO("REGISTERED\nStarting motion server\n");
 
     PROCESS_END();
+
 }
-//aggiungere if per la disattivazione del sensore completo se premi bottone
+
 PROCESS_THREAD(sensor_node, ev, data){
 
     button_hal_button_t *btn;
@@ -120,14 +117,14 @@ PROCESS_THREAD(sensor_node, ev, data){
 	coap_activate_resource(&motion_sensor, "motion_resource");
     coap_activate_resource(&alert_actuator, "alert_actuator");
     btn = button_hal_get_by_index(0);
-
-etimer_set(&simulation, CLOCK_SECOND * SIMULATION_INTERVAL);
+    etimer_set(&simulation, CLOCK_SECOND * SIMULATION_INTERVAL);
     LOG_INFO("Simulation\n");
+
     while (1) {
-        PROCESS_YIELD();
-        //ogni 30 secondi triggera il controllo e genera random isDetected
+        PROCESS_WAIT_EVENT();
+        //ogni 30 secondi triggera il controllo e genera random isClosed
         if (ev == PROCESS_EVENT_TIMER && data == &simulation && !pressed) {
-            printf("Trigger Motion\n");
+            printf("Event trigger\n");
             motion_sensor.trigger();
             etimer_set(&simulation, CLOCK_SECOND * SIMULATION_INTERVAL);
         }
@@ -148,7 +145,7 @@ etimer_set(&simulation, CLOCK_SECOND * SIMULATION_INTERVAL);
             }
         }
     }
-	PROCESS_END();
+    PROCESS_END();
 }
 
 

@@ -23,7 +23,7 @@ class MotionResource :
         print("Conncected to Collector DB")
         self.address = source_address
         self.resource = resource
-        self.actuator_resource = "motion_sensor"
+        self.actuator_resource = "alert_actuator"
         self.isClosed = "F";
         self.opening = 90;
         self.isActive = "F";
