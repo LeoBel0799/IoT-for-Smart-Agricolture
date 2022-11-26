@@ -59,7 +59,7 @@ class MotionResource :
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
             activation = str(self.isActive)
-            sql = "INSERT INTO `coapsensorsmotion` (`closed`,`activation`,`opening`,) VALUES (%s,%s,%s)"
+            sql = "INSERT INTO `coapsensorsmotion` (`closed`,`activation`,`opening`) VALUES (%s,%s,%s)"
             cursor.execute(sql, (closed,activation,opening))
 
 
