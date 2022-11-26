@@ -63,16 +63,7 @@ class MqttClient():
             # Create a new record
             sql = "INSERT INTO `mqttsensors` (`temperature`,`humidity`,`forecast`,`pressure`,`water`,`timestamp`) VALUES (%s,%s,%s,%s,%s,%s)"
             cursor.execute(sql, (temperature, humidity, forecast, pressure, water,timestamp))
-            print("Temperature : ")
-            print(temperature)
-            print("Humidity :")
-            print(humidity)
-            print("Forecast : ")
-            print(forecast)
-            print("Pressure :")
-            print(pressure)
-            print("Rain Water :")
-            print(water)
+
 
 
         # Commit changes

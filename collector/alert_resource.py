@@ -1,16 +1,11 @@
-from coapthon.server.coap import CoAP
-from coapthon.resources.resource import Resource
 from coapthon.client.helperclient import HelperClient
-from coapthon.messages.request import Request
-from coapthon.messages.response import Response
-from coapthon import defines
 import json
-import time
-import server
-import threading
 from database import Database
 import tabulate
 import logging
+import datetime
+import time
+
 class AlertResource :
     def __init__(self,source_address,resource):
         # Initialize mote resource fields
@@ -33,12 +28,12 @@ class AlertResource :
             print(response.payload)
             nodeData = json.loads(response.payload)
             # read from payload of client
-            info = nodeData["info"].split(" ")
+            active = nodeData["active"].split(" ")
             opening = nodeData["opening"].split(" ")
             print("Detection mechanical cover degree status :")
-            print(info)
+            print(active)
             print(opening)
-            self.isClosed = info[0]
+            self.isClosed = active[0]
             self.opening = opening[0];
             # when an intrusion occurs a query is executed
             if self.isClosed == 'T':
@@ -51,12 +46,12 @@ class AlertResource :
             print("Payload empty")
 
 
-    def execute_query(self , value):
+    def execute_query(self , closed):
         print(self.connection)
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
-            sql = "INSERT INTO `coapsensorsalarm`(`value`, `opening`) VALUES (%s, %s)"
-            cursor.execute(sql, (value, opening))
+            sql = "INSERT INTO `coapsensorsalarm`(`closed`, `opening`) VALUES (%s, %s)"
+            cursor.execute(sql, (closed, opening))
         # connection is not autocommit by default. So you must commit to save
         # your changes.
         self.connection.commit()

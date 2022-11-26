@@ -230,7 +230,7 @@ while(1) {
     if (state == STATE_SUBSCRIBED) {
         // Publish something , specify tag of topic
         sprintf(pub_topic,"%s", "info");
-        strcpy(currentforecast, forecast[rand() % 4]);
+        strcpy(currentforecast, forecast[rand() % 3]);
         if (strcmp(currentforecast,"Sunny")){
             temperature = (rand() % (32 + 1 - 25) + 25);
             humidity = (rand() % (25 + 1 - 17) + 17);

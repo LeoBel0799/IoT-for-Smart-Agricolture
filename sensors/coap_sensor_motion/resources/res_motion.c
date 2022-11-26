@@ -39,9 +39,9 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     // N = negative
 
     if(isActive==true && opening<90){
-        opening=opening+10;
+        opening= (rand()%(90-10+1))+10;
     }else if(isActive==false){
-        opening = 90;
+        opening = 0;
     }
     if(isClosed==1){
         isActive=true;

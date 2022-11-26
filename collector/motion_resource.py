@@ -1,19 +1,10 @@
-from coapthon.server.coap import CoAP
-from coapthon.resources.resource import Resource
 from coapthon.client.helperclient import HelperClient
-from coapthon.messages.request import Request
-from coapthon.messages.response import Response
-from coapthon import defines
 import json
-import time
-import server
-import threading
 from database import Database
 import tabulate
 import logging
-from datetime import datetime
-from alert_resource import AlertResource
-
+import time
+import datetime
 
 class MotionResource :
     def __init__(self,source_address,resource):
@@ -39,7 +30,7 @@ class MotionResource :
             nodeData = json.loads(response.payload)
             # read from payload of client
             isClosed = nodeData["closed"].split(" ")
-            info = nodeData["info"].split(" ")
+            info = nodeData["active"].split(" ")
             opening = nodeData["opening"].split(" ")
             print("Detection value node :")
             print(isClosed)
@@ -62,14 +53,14 @@ class MotionResource :
 
 
 
-    def execute_query_motion(self, value):
+    def execute_query_motion(self, closed):
 
         print(self.connection)
         with self.connection.cursor() as cursor:
             opening = str(self.opening)
             activation = str(self.isActive)
-            sql = "INSERT INTO `coapsensorsmotion` (`value`,`activation`,`opening`) VALUES (%s,%s,%s)"
-            cursor.execute(sql, (value,activation,opening))
+            sql = "INSERT INTO `coapsensorsmotion` (`closed`,`activation`,`opening`,) VALUES (%s,%s,%s)"
+            cursor.execute(sql, (closed,activation,opening))
 
 
         # connection is not autocommit by default. So you must commit to save
