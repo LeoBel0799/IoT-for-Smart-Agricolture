@@ -52,7 +52,7 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
     char value2 = isClosed == 1 ? 'T': 'N';
     strcpy(msg,"{\"closed\":\"");
     strncat(msg,&value2,1);
-    strcat(msg,"\", \"info\":\"");
+    strcat(msg,"\", \"active\":\"");
     strncat(msg,&value1,1);
     strcat(msg,"\", \"opening\":\"");
     char degree[400];

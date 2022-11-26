@@ -26,8 +26,7 @@ post_switch_handler,
 NULL,
 NULL); //--> handler invoke auto  every time the state of resource change
 
-//get per sapere lo stato
-// Modificare da p37 a 51
+
 static void get_opening_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
     // Create a JSON message with the detected presence value and led value
@@ -37,13 +36,12 @@ static void get_opening_handler(coap_message_t *request, coap_message_t *respons
     // T = true
     // N = negative
     char value2 = isActive == true ? 'T': 'N';
-    strcpy(msg,"{\"info\":\"");
+    strcpy(msg,"{\"active\":\"");
     strncat(msg,&value2,1);
     //strcat(msg,"\" \"");
     strcat(msg,"\", \"opening\":\"");
     char degree[400];
     sprintf(degree, "%d", opening);
-    //printf("intensity: %s\n", intensity_str);
     strcat(msg,degree);
     strcat(msg,"\"}");
     printf("Message: %s\n",msg);
