@@ -54,10 +54,10 @@ class MotionResource :
 
 
     def execute_query_motion(self, closed):
-        ts = time.time()
-        timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
         print(self.connection)
         with self.connection.cursor() as cursor:
+            ts = time.time()
+            timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
             opening = str(self.opening)
             activation = str(self.isActive)
             sql = "INSERT INTO `coapsensorsmotion` (`closed`,`activation`,`opening`,`timestamp`) VALUES (%s,%s,%s,%s)"
