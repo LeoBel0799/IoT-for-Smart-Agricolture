@@ -12,4 +12,4 @@ The two covers are side-located to grape marquees and both have a 90° opening r
 Sensors interact with a python application that works as a server collecting data and saving them into a MySQL database. Moreover, server deals with sensors sending response data.
 Grafana, that is a visual-real time dashboard is then used to plot out what is saved on MySQL.
 
-![image](https://user-images.githubusercontent.com/60001748/206859550-73325dc8-5cf8-47cd-9fc1-ed84e4b5546d.png)
+![image](https://user-images.githubusercontent.com/60001748/206859585-58d223e1-94e5-4703-a419-37528e72b788.png)
