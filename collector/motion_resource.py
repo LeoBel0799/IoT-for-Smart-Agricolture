@@ -61,7 +61,7 @@ class MotionResource :
             opening = str(self.opening)
             activation = str(self.isActive)
             sql = "INSERT INTO `coapsensorsmotion` (`closed`,`activation`,`opening`,`timestamp`) VALUES (%s,%s,%s,%s)"
-            cursor.execute(sql, (closed,activation,opening))
+            cursor.execute(sql, (closed,activation,opening,timestamp))
 
 
         # connection is not autocommit by default. So you must commit to save
