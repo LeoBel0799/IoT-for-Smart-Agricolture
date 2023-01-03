@@ -19,8 +19,8 @@ static void res_get_handler(coap_message_t *request, coap_message_t *response, u
 static void res_event_handler(void);
 
 
-EVENT_RESOURCE(motion_sensor, //--> name
-"title=\"Motion sensor: ?POST/PUT\";obs",   //---> descriptor (obs significa che è osservabile)
+EVENT_RESOURCE(motion_sensor,
+"title=\"Motion sensor: ?POST/PUT\";obs",
 res_get_handler, //--> handler
 NULL,
 NULL,
@@ -30,13 +30,10 @@ res_event_handler); //--> handler invoke auto  every time the state of resource 
 static void res_get_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
 
-    // Create a JSON message with the detected presence value and led value
-    // In both the resources the get_handler return the current sensor values
     int length;
 
     char msg[300];
-    // T = true
-    // N = negative
+
 
     if(isActive==true && opening<90){
         opening= (rand()%(90-10+1))+10;

@@ -112,7 +112,7 @@ static void pub_handler(const char *topic, uint16_t topic_len, const uint8_t *ch
     if (strcmp(topic, "actuator") == 0) {
         printf("Received Actuator command\n");
         printf("%s\n", chunk);
-        // Do something :)
+
         return;
     }
 }
@@ -212,7 +212,7 @@ while(1) {
     }
 
     if(state==STATE_CONNECTED){
-        // Subscribe to a topic
+        //Topic subscribe
         strcpy(pub_topic,"info");
         state = mqtt_subscribe(&conn, NULL, pub_topic,MQTT_QOS_LEVEL_0);
         printf("Subscribing\n");
@@ -228,7 +228,6 @@ while(1) {
     }
 
     if (state == STATE_SUBSCRIBED) {
-        // Publish something , specify tag of topic
         sprintf(pub_topic,"%s", "info");
         strcpy(currentforecast, forecast[rand() % 3]);
         if (strcmp(currentforecast,"Sunny")){
@@ -259,12 +258,12 @@ while(1) {
 
         sprintf(app_buffer,"{\"temperature\":%d,\"humidity\":%d,\"forecast\":%d,\"pressure\":%d,\"rain\":%d}",temperature,humidity,whether,pressure,mm_water);
         printf("Message: %s\n",app_buffer);
-        //code to publish the message
+        //Publish message
         mqtt_publish(&conn, NULL, pub_topic, (uint8_t *)app_buffer,strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 
     }else if ( state == STATE_DISCONNECTED ){
         LOG_ERR("Disconnected from MQTT broker\n");
-        // Recover from error
+        //Error recovering
         state = STATE_INIT;
     }
         etimer_set(&periodic_timer, STATE_MACHINE_PERIODIC);

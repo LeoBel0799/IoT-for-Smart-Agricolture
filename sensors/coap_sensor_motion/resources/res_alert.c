@@ -5,7 +5,7 @@
 #include "os/dev/leds.h"
 #include "sys/etimer.h"
 
-/* Log configuration */
+//LOG
 #include "sys/log.h"
 #define LOG_MODULE "motion sensor"
 #define LOG_LEVEL LOG_LEVEL_DBG
@@ -17,7 +17,7 @@ static void get_opening_handler(coap_message_t *request, coap_message_t *respons
 static void post_switch_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 
 
-//qui costruisco la response che devo dare al client
+//Building up client response
 
 RESOURCE(alert_actuator, //--> name
 "title=\"alarm_actuator: ?POST\";obs;rt=\"alarm\"",
@@ -30,7 +30,6 @@ NULL); //--> handler invoke auto  every time the state of resource change
 static void get_opening_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
     // Create a JSON message with the detected presence value and led value
-    // In both the resources the get_handler return the current sensor values
     int length;
     char msg[300];
     // T = true

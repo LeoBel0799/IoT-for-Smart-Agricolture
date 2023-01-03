@@ -12,8 +12,6 @@ from coapthon import defines
 from alert_resource import AlertResource
 from motion_resource import MotionResource
 
-# Contain all the registered users
-registeredUsersDict = {}
 
 '''
     Advanced resource: manage automatically response to registration request. Creates a MoteResource object 

@@ -64,8 +64,7 @@ class MotionResource :
             cursor.execute(sql, (closed,activation,opening,timestamp))
 
 
-        # connection is not autocommit by default. So you must commit to save
-        # your chcreatanges.
+
         self.connection.commit()
         # Show data log
         with self.connection.cursor() as cursor2:
